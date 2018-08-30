@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Assign Plate Number</title>
+ {% include 'partials/css_head_links.html' %}
+
+    <style>
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" required placeholder="Search for TIN" >
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Issue Plate number</li>
+      </ol>
+      <!-- Example DataTables Card-->
+
+      <div class="card">
+      <h5 class="card-header">Select Local Government area</h5>
+      <div class="card-body">
+
+
+          <form action="/store/get-lgov-numberplates/" method="POST"> 
+                {% csrf_token %}
+            <div class="form-group">
+
+                <div class="form-group row">
+                    <label for="category_name" class="col-sm-2 col-form-label">Office Name</label>
+                    <div class="col-sm-10">
+                       <input  name="office_name" readonly class="col lead text-left text-capitalize" value="{{office_name}}">
+                    </div>
+                </div>
+
+
+
+              </div>
+
+                 <div class="form-group row">
+                      <label for="lga" class="col-sm-2 col-form-label">Select Local Gov.</label>
+                      <div class="col-sm-10">
+
+                       
+                       <select required class="form-control form-control-sm" name="lga">
+                          <option value="">Choose Local Government</option>
+
+                         
+                           {% if lg  %}
+                           <option value="{{lg}}" > {{lg}} </option>
+                          
+
+                            {% else  %}
+               
+                                  {% for LGA in LGAs %}
+                                   
+                                        <option > {{LGA.local_government_name}} </option>
+                                  {% endfor %}
+
+                              {% endif %}
+                                  
+                                
+                      </select>
+                       
+                      </div>
+                    </div>
+
+                  <div class="form-group row"> 
+                    <div class="col-sm-2 offset-md-2">
+                        <input type="submit"  class="btn btn-primary" value="Submit">
+                    </div>
+                </div>
+
+          </form>
+      </div>
+
+</div>
+
+<!-- tabels -->
+  <div class="row">
+    <div class="col col-sm-6">
+      <div class="card mb-3 my-3">
+        <div class="card-header">
+          <i class="fa fa-table"></i> Number Plates in local Gov {{lg}} </div>
+        <div class="card-body">
+
+          <div class="table-responsive"> 
+
+             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+             {% if number_plates %}
+
+                <tr> 
+                  <th>R. Date</th>
+                  <th>Number Plate</th>
+                  <th>Status</th>
+                 
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>R. Date</th>
+                  <th>Number Plate</th>
+                  <th>Status</th>
+                  
+                </tr>
+              </tfoot>
+  
+
+
+              <tbody>
+                {% for number_plate in number_plates %}
+                <tr> 
+                  <td>{{ number_plate.registration_date }}</td>
+                  <td>{{ number_plate.number_plate }}</td>
+
+                 
+                  <td>
+                    <form action="/store/issue-reissue-car-plate/" method="POST">
+
+                      {% csrf_token %}
+                      
+                      <input type="hidden" value="{{number_plate.number_plate}}" name="plate_number"> 
+                      <input type="submit"  class="btn btn-outline-primary btn-sm" value="Issue"> 
+                    </form>
+                    
+
+
+                  
+                  </td>
+                  
+                </tr>
+                {% endfor %}
+              </tbody>
+              {% else %}
+
+                {% if note_NP_LG %}
+                 <div class="alert alert-warning float-left"  role="alert">
+                      Please Select a Local Gov to see Plate Numbers
+                </div>
+
+                {% else %}
+                 <div class="alert alert-warning float-left"  role="alert">
+                     No Plate Numbers in this Government  
+                </div>
+
+
+                {% endif %}
+              {% endif %}
+              
+
+            </table>
+          </div>
+    </div>
+  </div>
+</div>
+  <div class="col col-sm-6">
+      <div class="card mb-3 my-3">
+        <div class="card-header">
+          <i class="fa fa-table"></i>Assigned Number Plates in office {{office_name}}</div>
+        <div class="card-body">
+
+          <div class="table-responsive"> 
+
+             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+             {% if issued_number_plates %}
+
+                <tr> 
+                  <th>R. Date</th>
+                  <th>Number Plate</th>
+                  <th>Status</th>
+                 
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>R. Date</th>
+                  <th>Number Plate</th>
+                  <th>Status</th>
+                  
+                </tr>
+              </tfoot>
+  
+
+
+              <tbody>
+                {% for issued_number_plate in issued_number_plates %}
+                <tr> 
+                  <td>{{ issued_number_plate.registration_date }}</td>
+                  <td>{{ issued_number_plate.number_plate }}</td>
+
+                 
+                  <td>
+                    {% if issued_number_plate.is_taken %}
+
+                    <h6><span class="badge badge-info">Taken</span></h6>
+                     
+                    {% else %}
+                     
+                      <form action="/store/issue-reissue-car-plate/" method="POST">
+                        {% csrf_token %}
+
+                      
+                      <input type="hidden" value="{{issued_number_plate.number_plate}}" name="plate_number"> 
+                     
+                      <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#confirmPassModal">ReIssue</button> 
+
+
+                       <div class="modal fade" id="confirmPassModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="addStateCodeModalTitle">Password Confirmation</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body"> 
+
+                                <div class="form-group">                     
+
+                                    
+                                    <label for="password" class="col-form-label">Password</label>
+                                    <input type="Password" class="form-control" name="password" required >
+                                  
+                                                
+                                </div>
+                                  <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                      <input type="submit"  class="btn btn-primary" value="ReIssue">
+                                     
+
+                                  </div>
+                             
+                             
+                            </div>
+                     
+                          </div>
+                        </div>
+                      </div>
+
+                    </form>
+
+                    {% endif %}
+                    
+                   
+
+                  
+                  </td>
+                  
+                </tr>
+                {% endfor %}
+              </tbody>
+              {% else %}
+                 <div class="alert alert-warning float-left"  role="alert">
+                     No Assigned Number Plates in this Office
+                </div>
+              {% endif %}
+              
+
+            </table>
+          </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+ <div class="modal fade" id="recordUpdatedModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Re assigned successfully</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p>  Plate Reassign was Successfull</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <a href="/store/get-office-plates/" class="btn btn-secondary" >OK</a>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="wrongPasswordModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Wrong Password</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p> Please type correct password</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+ <button type="button" class="btn btn-primary" onclick="continueEditingPage()">Ok</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+       <div class="modal fade" id="issueSuccessFullModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Issue Successfull</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p>  Operation  was successfull</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="wrongDataModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Wrong Input Data</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p> Please type correct Data</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" onclick="continueEditingPage()">Ok</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    <!-- Logout Modal-->
+
+ <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+  
+
+  {% include 'partials/js_links.html' %}
+</body>
+
+<script>
+
+    function continueEditingPage () {
+      // body... 
+     
+      window.history.back();
+    }
+           
+        
+
+ 
+  </script>
+
+         {% if messages %}
+
+          {% for message  in messages %}
+
+            {% if  "record_updated" in message.extra_tags %}
+             
+              <script>    
+
+                
+                     $('#recordUpdatedModal').modal('show');
+                
+            </script>
+
+            {% elif  "wrong_pass" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongPasswordModal').modal('show');
+                
+            </script>
+
+            {% elif  "wrong_data" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongDataModal').modal('show');
+                
+            </script>
+
+
+            {% elif  "success" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#issueSuccessFullModal').modal('show');
+                
+            </script>
+ 
+
+         
+
+            
+            {% endif %}
+
+              
+          {% endfor %}
+
+        {% endif %}
+
+
+
+
+
+</html>

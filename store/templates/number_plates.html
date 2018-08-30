@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Number Plates</title>
+ {% include 'partials/css_head_links.html' %}
+
+    <style>
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+     .inline{
+      display: inline;
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" placeholder="Search for TIN" required>
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Number Plates</li>
+      </ol>
+      <!-- Example DataTables Card-->
+      <div class="card mb-3">
+        <div class="card-header">
+          <i class="fa fa-table"></i> Number Plates</div>
+        <div class="card-body">
+
+          <div class="table-responsive">
+             <a href="/store/add-number-plate/"  class="btn btn-primary"  style="float: right;margin-left: 20%;margin-right: 20px;">Add Number Plate</a>
+
+
+
+
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+             {% if number_plates %}
+
+                <tr>
+                  <th>Date </th>
+                  <th>Plate Number</th>
+                  <th>Local Government</th>
+                  <th>Status</th>
+                  <th>Options</th>
+                 
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>Date </th>
+                  <th>Plate Number</th>
+                  <th>Local Government</th>
+                  <th>Status</th>
+                  <th>Options</th>
+                  
+                </tr>
+              </tfoot>
+             
+
+
+
+              <tbody>
+                {% for number_plate in number_plates %}
+                <tr> 
+                  <td>{{ number_plate.registration_date }}</td>
+                  <td>{{ number_plate.number_plate }}</td>
+                  <td>{{ number_plate.local_government }}</td>
+                  <td>{{ number_plate.is_issued }}</td>
+
+                 
+                  <td>
+   
+ 
+                    {% if number_plate.is_taken %}
+
+                      <h6><span class="badge badge-info">Taken</span></h6>
+
+                    {% elif number_plate.is_issued %}
+
+                    <h6><span class="badge badge-info">Issued</span></h6>
+                  
+                    {% else %}
+
+                      <button type="button" class="btn btn-outline-danger btn-sm delete-plate" data-plate_id="{{number_plate.number_plate}}"> Delete</button> &nbsp;&nbsp;
+
+                      <button type="button" class="btn btn-outline-warning btn-sm edit-plate-lg" data-local_gov="{{ number_plate.local_government }}" data-plate_id="{{number_plate.id}}" data-plate_number="{{number_plate.number_plate}}" >Change LG</button> &nbsp;&nbsp;
+
+
+
+                        
+                      
+                    {% endif %}
+
+
+
+
+
+
+ 
+
+                    
+                  </td>
+                  
+                </tr>
+                {% endfor %}
+              </tbody>
+              {% else %}
+                 <div class="alert alert-warning float-left"  role="alert">
+                     No Individual Records yet
+                </div>
+              {% endif %}
+              
+            </table>
+
+ 
+          </div>
+        </div>
+        <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
+      </div>
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © Your CoreIGR 2018</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+
+
+      
+    <!-- Logout Modal-->
+    <div class="modal fade" id="plateTakenModal">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+            
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h5 class="modal-title">Plate Taken!</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              
+              <!-- Modal body -->
+              <div class="modal-body">
+                <p>This number plate has been assigned to a certain car so it cant be edited </p>
+              </div>
+              
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+         <div class="modal fade" id="recordDeletedModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Plate Deleted</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p>  Plate Deleted Successful</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="wrongPasswordModal" data-backdrop="static">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Wrong Password</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p> Password is wrong</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+               <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="modal fade" id="wrongDataModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Wrong Input Data</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p> Please type correct Data</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal fade" id="recordAlreadyExistModal">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+            
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h5 class="modal-title">Record Exist!</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              
+              <!-- Modal body -->
+              <div class="modal-body">
+                <p> Record you are trying to update already exist </p>
+              </div>
+              
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+
+    <div class="modal fade" id="editPlateNumberModal" tabindex="-1" role="dialog"   aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addStateCodeModalTitle">Confirm Delete Plate </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <!-- -------------------------------------------------------------------- -->
+            
+              <form action="/store/edit-number-plate/" method="POST"> 
+                {% csrf_token %}
+
+                 
+                 
+                   <div class="form-group ">
+                      <label for="amount" class="col-form-label">Number Plate</label>
+                       
+                          
+                        <input type="text" readonly class="form-control" name="plate_number"  id="plate_number_delete">
+                           
+                    </div>
+      
+                  
+                    <div class="form-group ">
+                      <label for="amount" class="col-form-label">Password</label>
+                       
+                          
+                        <input type="password" required class="form-control" name="password">
+                           
+                    </div>
+
+
+                     <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <input type="submit"  class="btn btn-danger" value="Delete Number Plate">
+                    </div>
+                
+                
+              </form>
+
+             
+            </div>
+           
+          </div>
+        </div>
+      </div>
+
+     <div class="modal fade" id="editPlateLGModal" tabindex="-1" role="dialog"   aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addStateCodeModalTitle">Edit Plate LG </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <!-- -------------------------------------------------------------------- -->
+            
+              <form action="/store/edit-plate-lg/" method="POST"> 
+                {% csrf_token %}
+
+                
+
+                    <div class="form-group ">
+                      <label  class="col-form-label">Plate Number</label>
+                       
+                          
+                        <input type="text" readonly class="form-control border-0 lead text-uppercase"  name="plate_number_" id="plate_number_">
+
+                        <input type="hidden" class="form-control border-0 lead text-uppercase"  name="plate_number" id="plate_number">
+                           
+                    </div>
+
+                    
+
+
+
+
+                    <div class="form-group ">
+                      <label for="amount" class="col-form-label">Local goverment</label>
+                       
+                            <select required name="local_government" id="local_government_"  class="form-control">
+                            {% if LGAs %}
+                           <option value="">choose Office</option>
+                            {% for LGA in LGAs %}
+                            <option >{{ LGA.local_government_name }}</option>
+                            {% endfor %}
+
+                            {% endif %}
+                            
+                      </select>
+                      
+                    </div>
+
+ 
+                    <div class="form-group ">
+                      <label for="amount" class="col-form-label">Password</label>
+                       
+                          
+                        <input type="password" required class="form-control" name="password">
+                           
+                    </div>
+
+
+                     <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <input type="submit"  class="btn btn-primary" value="Edit Number LG">
+                    </div>
+                
+                
+              </form>
+
+             
+            </div>
+           
+          </div>
+        </div>
+      </div>
+
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+{% include 'partials/js_links.html' %}
+  </div>
+</body>
+
+
+<script>
+
+
+             
+          $(document).ready(function() {
+              $("input:text")
+                  .focus(function () { $(this).select(); } )
+                  .mouseup(function (e) {e.preventDefault(); });
+          });
+
+
+          $(".delete-plate").on("click", function () {
+            /* body... */
+
+
+            $('#editPlateNumberModal').modal('show');     
+            
+            $('#plate_number_delete').val($(this).attr('data-plate_id'))
+   
+            
+             
+          })
+
+          $(".edit-plate-lg").on("click", function () {
+            /* body... */
+
+
+            $('#editPlateLGModal').modal('show');     
+            
+            $('#plate_number').val($(this).attr('data-plate_id'))
+
+            $('#local_government_').val($(this).attr('data-local_gov'))
+            
+
+             $('#plate_number_').val($(this).attr('data-plate_number'))
+            
+            
+             
+          })
+
+          
+   
+    </script>
+
+
+      {% if messages %}
+
+            {% for message  in messages %}
+
+               {% if  "record_deleted" in message.extra_tags %}
+               
+                <script>                   
+                  
+                       $('#recordDeletedModal').modal('show');
+                  
+              </script>
+ 
+
+            {% elif  "wrong_pass" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongPasswordModal').modal('show');
+                
+            </script>
+
+            {% elif  "wrong_data" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongDataModal').modal('show');
+                
+            </script>
+
+           
+
+            {% elif  "plate_taken" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#plateTakenModal').modal('show');
+                
+            </script>
+           
+
+ 
+              
+              {% endif %}
+
+                
+            {% endfor %}
+
+          {% endif %}
+
+</html>

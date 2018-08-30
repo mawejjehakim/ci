@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Learners Permit</title>
+  {% load static %}
+ {% include 'partials/css_head_links.html' %}
+
+   <style>
+   .no-field-style{
+    border: none;
+    background-color: transparent;
+   }
+ 
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" placeholder="Search for TIN" required>
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">LEARNERS PERMIT</li>
+      </ol> 
+
+<!--       <div class="card border-0">
+        <div class="card-header">
+          <i class="fa fa-table"></i> Add vehicle</div>
+        <div class="card-body"> -->
+
+          
+          <div class="row">
+          <div class="col">
+
+            <div class="card" style="">
+              <img src="{{individal_obj.passport_pic_url}}" class="  card-img-top" alt="Individual Image">
+              <div class="card-body">
+                <h5 class="card-title">Personal Information</h5>
+              
+              </div>
+             <div>
+               {% csrf_token %}
+               
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <div class="row  "> 
+
+                      <div class="col-sm-5">
+                        TIN
+                      </div>
+                      <div class="col lead text-left text-capitalize">
+                         
+                          {{individal_obj.tin.tin}}
+                        
+                      </div>
+                       
+                    </div>
+                </li>
+                <li class="list-group-item">
+                  <div class="row  "> 
+
+                    <div class="col-sm-5">
+                      Name
+                    </div>
+                    <div class="col lead text-left text-capitalize">
+                      {{individal_obj.name}}
+                    </div>
+                     
+                  </div>
+                </li>
+
+                <li class="list-group-item">
+                   <div class="row  "> 
+
+                    <div class="col-sm-5">
+                      Gender
+                    </div>
+                    <div class="col lead text-left text-capitalize">
+                      {{ individal_obj.gender }}
+                    </div>
+                     
+                  </div>
+                </li>
+               <li class="list-group-item">
+                <div class="row  "> 
+
+                    <div class="col-sm-5">
+                      Address
+                    </div>
+                    <div class="col lead text-left text-capitalize ">
+                     {{ individal_obj.address }} 
+                    </div>
+                     
+                  </div>
+                </li>
+              </ul>
+              
+            </div>   </div>     
+             
+
+              
+ 
+          </div>
+
+
+          <div class="col-sm-8">
+            <form  action="/mla/save-learners-permit/" method="POST" class="card border-dark">
+             
+             {% csrf_token %}
+
+              <div class="card-header">Permit Info</div>
+               <div class="card-body">
+
+              <input type="hidden" name="individual_tin" value="{{individal_obj.tin.tin}}">  
+                 
+
+              
+              <div class="form-group row">
+                <label for="registration_number" class="col col-form-label">Transaction Code</label>
+                <div class="col-sm-9">
+                   <input type="text" class="lead text-left text-capitalize no-field-style"  name="transaction_code" value="{{transaction_code}}" readonly> 
+                </div>
+              </div>
+
+
+
+              
+ 
+                 
+               <div class="form-group row">
+                <label for="bussiness_owner" class="col col-form-label">Expiration Date</label>
+                <div class="col-sm-9">
+                  <input type="text" class="no-field-style lead text-left text-capitalize"  value="{{expiration_date}}" name="expiration_date" readonly>
+                </div>
+              </div>
+
+
+
+
+              
+              <div class="form-group row">
+
+
+                <label for="particulars" class="col col-form-label">Options</label>
+                <div class="col-sm-9">
+
+                  <select required name="particulars"  class="form-control">
+                     <option value="">Choose..</option>
+                          <option>Permit Only</option>
+              
+                          <option>Permit and L-Symbol</option>
+                  </select>
+                 
+                </div>
+              </div>
+
+ 
+               
+            
+                 <div class="form-group row"> 
+                    <div class="col-sm-2 offset-md-3">
+                        <input type="submit"  class="btn btn-primary" value="Next">
+                    </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+          </div>
+          
+       <!--  </div>
+        </div>
+         -->
+       
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © Your CoreIGR 2018</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+
+
+
+<!-- confirm transaction -->
+  <div class="modal fade " data-backdrop="static" tabindex="-1" id="transactionReviewModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        
+ 
+
+        <div class="modal-content px-3">
+           <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Transaction Review</h5>
+            <a href="/mla/get-learners-permit">  
+              <span aria-hidden="true">&times;</span>
+            </a>
+          </div>
+         
+
+          <div class="card border-primary mb-3" >
+              <div class="card" style="">
+                <div class="card-header">New Owner</div>
+              
+              <div class="card-body">
+                
+             
+                           <div class="row  "> 
+
+                              <div class="col">
+                                TIN
+                              </div>
+                              <div class="col lead text-left text-uppercase">
+                                 
+                                  {{individal_obj.tin.tin}} 
+                                
+                              </div>                       
+                            </div>
+                       
+                          
+                           <div class="row  "> 
+
+                              <div class="col ">
+                                Name
+                              </div>
+                              <div class="col lead text-left text-uppercase">
+                                 
+                                  {{individal_obj.name}} 
+                                
+                              </div>                       
+                            </div>
+                        </li>    
+
+                          <div class="row  "> 
+
+                              <div class="col">
+                                Gender
+                              </div>
+                              <div class="col lead text-left text-uppercase">
+                                 
+                                  {{individal_obj.gender}} 
+                                
+                              </div>                       
+                            </div>
+                       
+
+              </div>  
+            </div>
+           </div>
+
+             
+
+
+               <div class="card mb-3">
+        <div class="card-header">
+          <i class="fa fa-table"></i> Tranasction Assessment
+        </div>
+        <div class="card-body">
+
+          <div class="table-responsive">
+             
+             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+             {% if transaction_assessments %}
+
+                <tr>
+                <tr>
+                   <th>Transaction Code</th> 
+                  <th>Particular</th> 
+                  <th>Amount</th> 
+
+                </tr>
+                 
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                <tr>
+                  <th>Transaction Code</th> 
+                  <th>Particular</th> 
+                  <th>Amount</th> 
+
+                </tr>
+                  
+                </tr>
+              </tfoot> 
+
+              <tbody>
+                {% for transaction_assessment in transaction_assessments %}
+                <tr> 
+                  <td>{{ transaction_assessment.transaction_code }}</td>
+                  <td>{{ transaction_assessment.particulars }}</td>
+                  <td>{{ transaction_assessment.amount }}</td>
+                   
+                  
+                </tr>
+              {% endfor %}
+              </tbody>
+              {% else %}
+                 <div class="alert alert-warning float-left"  role="alert">
+                     No Assesments generated Yet
+                </div>
+              {% endif %}
+              
+            </table>
+
+ 
+          </div>
+        </div>
+        
+      </div>
+            <div class="modal-footer">
+                
+                <a href="/mla/get-learners-permit" class="btn btn-primary"  >Okay</a>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+ 
+
+
+    <div class="modal fade" id="chargeUnavailableModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Charge Unavailable</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> This type  Charge is Unavailable </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+           <a href="/mla/get-learners-permit/" type="button" class="btn btn-secondary"  >OK</a>
+         
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- new record created modal -->
+ 
+ 
+      <div class="modal fade" id="permitStillValidModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Learners Permit Still valid</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Learners Permit is still Valid you cant issue two lerners permit at ago</p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <a href="/mla/get-learners-permit/" type="button" class="btn btn-secondary"  >OK</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+    <!-- Logout Modal-->
+
+
+     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include 'partials/js_links.html' %}
+    {% if messages %}
+
+      {% for message  in messages %}
+
+        {% if  "record_created" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#transactionReviewModal').modal('show');
+            
+        </script>
+
+        {% elif  "others_charge_unavailable" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#chargeUnavailableModal').modal('show');
+            
+        </script>
+
+        {% elif  "permit_still_valid" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#permitStillValidModal').modal('show');
+            
+        </script>
+        
+
+        
+        {% endif %}
+
+          
+      {% endfor %}
+
+    {% endif %}
+  </div>
+</body>
+
+
+</html>

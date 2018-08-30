@@ -1,0 +1,35 @@
+
+{% load static %}
+<li class="nav-item border-bottom text-center" data-toggle="tooltip" data-placement="right" title="Dashboard">
+  <a class="nav-link" href="/login/">
+  <img class="img-fluid" src="{% static 'images/assets/logo.png' %}" alt="Chania"> 
+  </a>
+</li>
+
+
+
+<li class="nav-item border-bottom" data-toggle="tooltip" data-placement="right" title="Dashboard">
+  <a class="nav-link" href="">
+    <i class="fa fa-fw fa-dashboard"></i>
+    <span class="nav-link-text">DASHBOARD</span>
+  </a>
+</li>
+
+<li class="nav-item border-bottom" data-toggle="tooltip" data-placement="right" title="Components">
+  <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#setUp" >
+    <i class="fa fa-fw fa-cog"></i>
+    <span class="nav-link-text">SET UP MLA</span>
+  </a>
+  <ul class="sidenav-second-level collapse" id="setUp">
+    
+    <li>
+        <a href='/set-up/charges/'>Charges Setup</a>
+    </li>
+    <li>
+        <a href='/set-up/other-charges/'>Other Charges Setup</a>
+    </li>
+   
+
+
+  </ul>
+</li>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Get Tin Information To Revalidate</title>
+ {% include 'partials/css_head_links.html' %}
+
+    <style>
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" placeholder="Search for TIN" required>
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">VEHICLE REVALIDATION</li>
+      </ol>
+      <!-- Example DataTables Card-->
+
+      <div class="card">
+      <h5 class="card-header">Search Using Vehicle Chassis Number</h5>
+      <div class="card-body">
+
+
+       <form action="/mla/get-vehicle-revalidation/" method="POST"> 
+                {% csrf_token %}
+                <div class="form-group">
+
+                   <div class="form-group row">
+                    <label for="tin" class="col-sm-2 col-form-label">Vehicle Chasis Number</label>
+                    <div class="col-sm-10">
+                      <input type="text" required maxlength="17" class="form-control"  name="chassis_number">
+                    </div>
+                  </div>
+
+                   
+                     
+                   <div class="form-group row"> 
+                      <div class="col-sm-2 offset-md-2">
+                          <input type="submit"  class="btn btn-primary" value="Search Vehicle">
+                      </div>
+                  </div>
+
+                  </div>
+                </form>
+              </div>
+            </div>
+
+         
+
+
+        <div class="modal fade" id="wrongChassisNumberModal">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+            
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h5 class="modal-title">Wrong Chassis Number </h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              
+              <!-- Modal body -->
+              <div class="modal-body">
+                <p> Chassis number is wrong </p>
+              </div>
+              
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="exceptionModal" data-backdrop="static">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header bg-danger">
+              <h5 class="modal-title">Error!!</h5> 
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p>Something wrong happened try agin </p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <a href="/mla/get-for-vehicle-assessment/" class="btn btn-primary"  >Ok</a> 
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+
+    <!-- Logout Modal-->
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  {% include 'partials/js_links.html' %}
+
+   {% if messages %}
+
+          {% for message  in messages %}
+
+            {% if  "wrong_chassis" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongChassisNumberModal').modal('show');
+                
+            </script>
+
+            {% elif  "error" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#exceptionModal').modal('show');
+                
+            </script>
+ 
+             
+           
+    {% endif %}
+
+      
+   {% endfor %}
+  {% endif %}
+</body>
+
+
+</html>

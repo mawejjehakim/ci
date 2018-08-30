@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Edit Individual</title>
+ {% include 'partials/css_head_links.html' %} 
+  <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+ <style>
+   .no-field-style{
+    border: none;
+    background-color: transparent;
+   }
+    
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" required placeholder="Search for TIN" >
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Edit Individual</li>
+      </ol>
+      
+    <div class="card">
+      <h5 class="card-header">Edit Individual</h5>
+      <div class="card-body">
+      <form action="/tin/update-individual/" method="POST">
+               {% csrf_token %}
+           
+              <input type="hidden" name="tin" value="{{ individual_obj.tin.id}} ">
+               <input type="hidden" name="id" value="{{ individual_obj.id}} ">
+              
+
+              <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                   <input type="text" required class="form-control"  name="name" value="{{ individual_obj.name}} "> 
+                </div>
+              </div>
+
+               <fieldset class="form-group">
+                <div class="row">
+                  <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+                  <div class="col-sm-10">
+                    
+
+                      {% if individual_obj.gender == "Male" %}
+                      <div class="form-check">
+
+
+                      <input class="form-check-input" checked="checked" type="radio" name="gender"  value="Male">
+                      <label class="form-check-label" >
+                        Male
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+
+
+                      <input class="form-check-input"  type="radio" name="gender"  value="Male">
+                      <label class="form-check-label" >
+                        Male
+                      </label>
+                    </div>
+
+
+
+                    {% else %}
+                    <div class="form-check">
+
+
+                      <input class="form-check-input"  type="radio" name="gender"  value="Male">
+                      <label class="form-check-label" >
+                        Male
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input" checked="checked" required type="radio" name="gender"  value="Female">
+                      <label class="form-check-label">
+                        Female
+                      </label>
+                    </div>
+
+                    {% endif %}
+                    
+                  </div>
+                </div>
+              </fieldset>
+
+               <div class="form-group row">
+                <label for="date_of_birth" class="col-sm-2 col-form-label">Birth Date</label>
+                <div class="col-sm-10">
+                  <input type="date" class="form-control" required name="date_of_birth" value="{{individual_obj.date_of_birth}}">
+                </div>
+              </div>
+
+
+              <div class="form-group row">
+                <label for="marital_status" class="col-sm-2 required col-form-label">Marital Status</label>
+                <div class="col-sm-10">
+
+                  <select required name="marital_status"  class="form-control">
+                      <option value="{{individual_obj.marital_status}}">{{individual_obj.marital_status}}</option>
+                      <option>Single</option>
+                      <option>Married</option>
+                      <option>Divorced</option>
+                      <option>Others</option>
+                  </select>
+                 
+                </div>
+              </div>
+
+
+              <div class="form-group row">
+                <label for="state" class="col-sm-2 col-form-label">State of Origin</label>
+                <div class="col-sm-10">
+
+                  <select required name="state"  class="form-control">
+                      <option value="{{ individual_obj.state }}">{{ individual_obj.state }}</option>
+                     <option>Abia</option>
+                      <option>Adamawa</option>
+                      <option>Akwa Ibom</option>
+                      <option>Anambra</option>
+                      <option>Bauchi</option>
+                      <option>Bayelsa</option>
+                      <option>Benue</option>
+                      <option>Borno</option>
+                      <option>Cross River</option>
+                      <option>Delta</option>
+                      <option>Ebonyi</option>
+                      <option>Enugu</option>
+                      <option>Edo</option>
+                      <option>Ekiti</option>
+                      <option>Gombe</option>
+                      <option>Imo</option>
+                      <option>Jigawa</option>
+                      <option>Kaduna</option>
+                      <option>Kano</option>
+                      <option>Katsina</option>
+                      <option>Kebbi</option>
+                      <option>Kogi</option>
+                      <option>Kwara</option>
+                      <option>Lagos</option>
+                      <option>Nasarawa</option>
+                      <option>Niger</option>
+                      <option>Ogun</option>
+                      <option>Ondo</option>
+                      <option>Osun</option>
+                      <option>Oyo</option>
+                      <option>Plateau</option>
+                      <option>Rivers</option>
+                      <option>Sokoto</option>
+                      <option>Taraba</option>
+                      <option>Yobe</option>
+                      <option>Zamfara</option>
+                      <option>FCT</option>
+
+                    </select>
+                 
+                </div>
+              </div>
+
+
+
+
+               <div class="form-group row">
+                <label for="address" class="col-sm-2 col-form-label">Address</label>
+                <div class="col-sm-10">
+                  <textarea required class="form-control" name="address" rows="2" >{{individual_obj.address}}
+                  </textarea>
+                </div>
+              </div>
+
+               
+
+
+
+               <div class="form-group row">
+                <label for="phone" class="col-sm-2 col-form-label">Phone</label>
+                <div class="col-sm-10">
+                  <input type="text" required class="form-control" name="phone" value="{{ individual_obj.phone}} ">
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                  <input type="email" required class="form-control" name="email" value="{{ individual_obj.email}} ">
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label for="occupation" class="col-sm-2 col-form-label">Occupation</label>
+                <div class="col-sm-10">
+                  <input type="text" required class="form-control"  name="occupation" value="{{ individual_obj.occupation}} ">
+                </div>
+              </div>
+
+
+               <div class="form-group row">
+                <label for="employment_status" class="col-sm-2 col-form-label">Employment Status</label>
+                <div class="col-sm-10">
+
+                  <select required name="employment_status"  class="form-control">
+                     <option value="{{ individual_obj.employment_status }}"> {{ individual_obj.employment_status }}</option>
+                       
+                        <option>Employed</option>
+                        <option>Unemployed</option>
+                        <option>Self Employed</option>
+                  </select>
+                 
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label for="work_place" class="col-sm-2 col-form-label">Work Place</label>
+                <div class="col-sm-10">
+
+                  <select required name="work_place"  class="form-control">
+                     <option value="{{ individual_obj.work_place}}">{{ individual_obj.work_place }}</option>
+               
+
+                     {% if work_places %}
+
+                        {% for work_place in work_places %}
+
+                            <option value="{{ work_place.id }}"> {{ work_place.bussiness_name }} </option>
+
+                        {% endfor %}
+
+                 
+                    {% else %}
+                        <strong> no workplaces yet </strong>
+                    {% endif %}
+                     
+
+                   
+                  </select>
+                 
+                </div>
+              </div>
+
+
+               
+            
+                 <div class="form-group row"> 
+                    <div class="col-sm-2 offset-md-2">
+                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmPassModal">Continue</button> 
+                       
+                    </div>
+                </div>
+
+
+
+
+                       <div class="modal fade" id="confirmPassModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" >Password Confirmation</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body"> 
+
+                                <div class="form-group">                     
+
+                                    
+                                    <label for="password" class="col-form-label">Password</label>
+                                    <input type="Password" class="form-control" name="password" required >
+                                  
+                                                
+                                </div>
+                                  <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    
+
+                                       <input type="submit"  class="btn btn-primary" value="Update">
+                                     
+
+                                  </div>
+                             
+                             
+                            </div>
+                     
+                          </div>
+                        </div>
+                      </div>
+            </form>
+             </div>
+      </div>
+
+
+     
+
+<!-- Modal -->
+   
+<!-- new record created modal -->
+ 
+
+
+    <div class="modal fade" id="recordUpdatedModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Record Updated</h5>
+           
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Record has been Updated successfully </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <a href="/tin/individuals/" class="btn btn-success" >OK</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+    <div class="modal fade" id="wrongDataModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Invalid data</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Please Type Correct data </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="continueEditingPage()">Ok</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+      <div class="modal fade" id="wrongPassModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Invalid Paassword</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Please Type Correct Password </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="continueEditingPage()">Ok</button>
+        </div>
+        
+      </div>
+    </div>
+
+   < 
+
+ 
+    <!-- Logout Modal-->
+
+
+     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% include 'partials/js_links.html' %}
+
+
+        {% if messages %}
+
+          {% for message  in messages %}
+
+            {% if  "record_updated" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#recordUpdatedModal').modal('show');
+                
+            </script>
+ 
+
+            {% elif  "wrong_data" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongDataModal').modal('show');
+                
+            </script>
+
+            {% elif  "wrong_pass" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongPassModal').modal('show');
+                
+            </script>
+
+
+           
+
+            
+         
+
+             
+            {% endif %}
+
+              
+          {% endfor %}
+
+        {% endif %}
+
+        <script>
+           
+        $(document).ready(function() {
+            $("input:text")
+                .focus(function () { $(this).select(); } )
+                .mouseup(function (e) {e.preventDefault(); });
+        });
+
+         function continueEditingPage () {
+          // body... 
+         
+          window.history.back();
+        }
+
+
+        </script>
+  </div>
+</body>
+ 
+
+
+</html>

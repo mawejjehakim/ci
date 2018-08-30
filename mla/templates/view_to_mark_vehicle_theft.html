@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Mark Vehicle Theft</title>
+  {% load static %}
+ {% include 'partials/css_head_links.html' %}
+  <style>
+   .no-field-style{
+    border: none;
+    background-color: transparent;
+   }
+    
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" placeholder="Search for TIN" required>
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Mark Vehicle Theft state</li>
+      </ol> 
+
+<!--       <div class="card border-0">
+        <div class="card-header">
+          <i class="fa fa-table"></i> Add vehicle</div>
+        <div class="card-body"> -->
+
+          
+          <div class="row">
+          <div class="col col-sm-5">
+
+            {% if individal_obj %}
+
+            <div class="card" style="">
+              <img src="{{individal_obj.passport_pic_url}}" class="  card-img-top" alt="Individual Image">
+              <div class="card-body">
+                <h5 class="card-title">Individual Details</h5>
+              
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <div class="row  "> 
+
+                      <div class="col-sm-5">
+                        TIN
+                      </div>
+                      <div class="col lead text-uppercase text-left">
+                         
+                          {{individal_obj.tin.tin}}
+                        
+                      </div>
+                       
+                    </div>
+                </li>
+                <li class="list-group-item">
+                  <div class="row  "> 
+
+                    <div class="col-sm-5">
+                      Name
+                    </div>
+                    <div class="col lead text-uppercase text-left">
+                      {{individal_obj.name}}
+                    </div>
+                     
+                  </div>
+                </li>
+
+                <li class="list-group-item">
+                   <div class="row  "> 
+
+                    <div class="col-sm-5">
+                      Gender
+                    </div>
+                    <div class="col lead text-uppercase text-left">
+                      {{ individal_obj.gender }}
+                    </div>
+                     
+                  </div>
+                </li>
+               <li class="list-group-item">
+                <div class="row  "> 
+
+                    <div class="col-sm-5">
+                      Address
+                    </div>
+                    <div class="col lead text-uppercase text-left ">
+                     {{ individal_obj.address }} 
+                    </div>
+                     
+                  </div>
+                </li>
+               <li class="list-group-item">
+                  
+                 <div class="row"> 
+
+                    <div class="col-sm-5">
+                      Occupation
+                    </div>
+                    <div class="col lead text-uppercase text-left  ">
+                     {{ individal_obj.occupation }}
+                    </div>
+                     
+                  </div>
+                </li>
+              </ul>
+
+            {% else %}
+              <div class="card" style="">
+              
+              <div class="card-body">
+                <h5 class="card-title">Comapany Details</h5>
+              
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <div class="row  "> 
+
+                      <div class="col-sm-5">
+                        TIN
+                      </div>
+                      <div class="col lead text-uppercase text-left">
+                         
+                          {{vehicle_obj.current_owner_tin.tin}}
+                        
+                      </div>
+                       
+                    </div>
+
+                   
+
+                </li>
+                <li class="list-group-item">
+                  <div class="row  "> 
+
+                    <div class="col-sm-5">
+                     Local Government
+                    </div>
+                    <div class="col lead text-uppercase text-left">
+                      {{company_obj.local_government}}
+                    </div>
+                     
+                  </div>
+                </li>
+
+                <li class="list-group-item">
+                   <div class="row  "> 
+
+                    <div class="col-sm-5">
+                      Bussiness Status
+                    </div>
+                    <div class="col lead text-uppercase text-left">
+                      {{ company_obj.bussiness_status }}
+                    </div>
+                     
+                  </div>
+                </li>
+               <li class="list-group-item">
+                <div class="row  "> 
+
+                    <div class="col-sm-5">
+                      Rc Number
+                    </div>
+                    <div class="col lead text-uppercase text-left ">
+                     {{ company_obj.registration_number }} 
+                    </div>
+                     
+                  </div>
+                </li>
+               <li class="list-group-item">
+                  
+                 <div class="row"> 
+
+                    <div class="col-sm-5">
+                      Bussiness Name
+                    </div>
+                    <div class="col lead text-uppercase text-left  ">
+                     {{ company_obj.bussiness_name }}
+                    </div>
+                     
+                  </div>
+                </li>
+
+               <li class="list-group-item">
+                  
+                 <div class="row"> 
+
+                    <div class="col-sm-5">
+                      Bussiness Owner
+                    </div>
+                    <div class="col lead text-uppercase text-left  ">
+                     {{ company_obj.bussiness_owner }}
+                    </div>
+                     
+                  </div>
+                </li>
+
+
+              </ul>
+
+            {% endif %}
+              
+            </div>        
+           
+          </div>
+
+
+          <div class="col-sm-7">
+             
+            <form class="card border-dark" action="/mla/vehicle-preview/" method="POST">
+               {% csrf_token %}
+
+              <div class="card-header">Vehicle Info</div>
+               <div class="card-body">
+
+               
+              <input type="hidden" name="current_owner_tin" value="{{ current_owner_tin }}"  >
+              
+              <div class="form-group row">
+                <label  class="col col-form-label">Chassis Number</label>
+                <div class="col-sm-8">
+                   <div class="col lead text-uppercase text-left">
+                         
+                          {{vehicle_obj.chassis_number}}
+                        
+                      </div>
+                </div>
+              </div>
+
+
+
+               <div class="form-group row">
+                <label  class="col col-form-label">Vehicle Model</label>
+                <div class="col-sm-8">
+                     <div class="col lead text-uppercase text-left">
+                         
+                          {{vehicle_obj.vehicle_model}}
+                        
+                      </div>
+                </div>
+              </div>
+
+  
+
+                 
+               <div class="form-group row">
+                <label for="number_plate" class="col col-form-label">Number Plate</label>
+                <div class="col-sm-8">
+                  <div class="col lead text-uppercase text-left">
+                         
+                          {{vehicle_obj.no_of_passengers}}
+                        
+                      </div>
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label   class="col col-form-label">Vehicle category</label>
+                <div class="col-sm-8">
+                  <div class="col lead text-uppercase text-left ">
+                         
+                          {{vehicle_obj.vehicle_category}}
+                        
+                      </div>
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label  class="col col-form-label">Gross Weight(kg)</label>
+                <div class="col-sm-8">
+                  <div class="col lead text-uppercase text-left">
+                         
+                          {{vehicle_obj.gross_weight}}
+                        
+                    </div>
+                </div>
+              </div>
+ 
+
+               <div class="form-group row">
+                <label for="net_weight" class="col col-form-label">Net Weight (kg)</label>
+                <div class="col-sm-8">
+                  <div class="col lead text-uppercase text-left">
+                         
+                          {{vehicle_obj.net_weight}}
+                        
+                      </div>
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label class="col col-form-label">No. of Persons</label>
+                <div class="col-sm-8">
+                  <div class="col lead text-uppercase text-left">
+                         
+                          {{vehicle_obj.no_of_passengers}}
+                        
+                      </div>
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label class="col col-form-label">Vehicle Color</label>
+                <div class="col-sm-8">
+                  <div class="col lead text-uppercase text-left">
+                         
+                          {{vehicle_obj.colour}}
+                        
+                      </div>
+                </div>
+              </div>
+
+               
+               
+            
+                 <div class="form-group "> 
+                    <div class="text-left offset-md-3">
+
+                      {% if vehicle_obj.theft_status %}
+                          <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#confirmPassModal">Unmark</button> 
+                           
+                        {% else %}
+                          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmPassModal">Mark</button> 
+                        {% endif %}
+ 
+
+
+
+                        
+
+                        
+                    </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+          </div>
+          
+       <!--  </div>
+        </div>
+         -->
+              <form action="/mla/mark-vehicle/" method="POST">
+                {% csrf_token %} 
+                       <div class="modal fade" id="confirmPassModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="addStateCodeModalTitle">Password Confirmation</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body"> 
+
+                                <div class="form-group"> 
+ 
+
+                                <input type="hidden" value="{{vehicle_obj.number_plate.number_plate}}" name="number_plate">                    
+
+                                    
+                                    <label for="password" class="col-form-label">Password</label>
+                                    <input type="Password" class="form-control" name="password" required >
+                                  
+                                                
+                                </div>
+                                  <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                      <input type="submit"  class="btn btn-primary" value="Mark">
+                                     
+
+                                  </div>
+                             
+                             
+                            </div>
+                     
+                          </div>
+                        </div>
+                      </div>
+                      </form>
+
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © Your CoreIGR 2018</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+
+      
+  <!-- new record created modal -->
+ 
+
+ 
+    <div class="modal fade" id="recordCreated">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Record created</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Record has been Created </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+      <div class="modal fade" id="wrongPassModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Wrong password</h5>
+          
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Passowrd is wrong </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button  class="btn btn-secondary" onclick="continueEditingPage()">OK</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+      
+ 
+
+ 
+    <!-- Logout Modal-->
+
+
+     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include 'partials/js_links.html' %}
+    {% if messages %}
+
+      {% for message  in messages %}
+
+        {% if  "wrong_pass" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#wrongPassModal').modal('show');
+            
+        </script>
+
+  
+
+
+        {% endif %}
+
+          
+      {% endfor %}
+
+    {% endif %}
+  </div>
+</body>
+<script>
+  function continueEditingPage () {
+    // body... 
+   
+    window.history.back();
+  }
+</script>
+
+
+</html>

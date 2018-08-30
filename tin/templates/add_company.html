@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Add Company</title>
+ {% include 'partials/css_head_links.html' %} 
+  <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+ <style>
+   .no-field-style{
+    border: none;
+    background-color: transparent;
+   }
+ 
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" required  placeholder="Search for TIN" >
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">add Company</li>
+      </ol>
+      
+    <div class="card">
+      <h5 class="card-header">COMPANY REGISTRATION (COMPANY)</h5>
+ 
+      <div class="card-body">
+      <form action="/tin/company-preview/" method="POST">
+               {% csrf_token %}
+              <div class="form-group row">
+                <label for="lga" class="col-sm-2 col-form-label">LGA</label>
+                <div class="col-sm-10">
+
+                  <select required name="lga"  class="form-control">
+                       <option value="">Choose local government</option>
+
+                    {% if LGAs %}
+
+                        {% for LGA in LGAs %}
+
+                            <option value="{{ LGA.local_government_code }}"> {{ LGA.local_government_name }} </option>"
+
+                        {% endfor %}
+
+
+                 
+                    {% else %}
+                        <strong> no offices yet </strong>
+                    {% endif %}
+                     
+
+                    </select>
+                 
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="institution" class="col-sm-2 col-form-label">Institution </label>
+                <div class="col-sm-10">
+
+                  <select required name="institution"  class="form-control">
+                      <option value="">Choose institution</option>
+                      
+                      <option>Non-Government</option>
+                      <option>Government</option>
+                  </select>
+                 
+                </div>
+              </div>
+
+
+              <div class="form-group row">
+                <label for="institution_type" class="col-sm-2 col-form-label">Institution Type</label>
+                <div class="col-sm-10">
+
+                  <select required name="institution_type"  class="form-control">
+                      <option value="">Select Institution Type</option>
+
+                  {% if institution_types %}
+
+                      {% for institution_type in institution_types %}
+
+                          <option value="{{ institution_type.type_name }}"> {{ institution_type.type_name }} </option>"
+
+                      {% endfor %}
+
+               
+                  {% else %}
+                      <strong> try reloading again </strong>
+                  {% endif %}
+                  </select>
+                 
+                </div>
+              </div>
+
+
+              <div class="form-group row">
+                <label for="institution_category" class="col-sm-2 col-form-label">Institution Category</label>
+                <div class="col-sm-10">
+
+                  <select required name="institution_category"  class="form-control">                   
+
+                      <option value="">Select Institution Category</option>
+
+                      {% if institution_categories %}
+
+                          {% for institution_category in institution_categories %}
+
+                              <option value="{{ institution_category.category_name }}"> {{ institution_category.category_name }} </option>"
+
+                          {% endfor %}
+
+                   
+                      {% else %}
+                          <strong> no offices yet </strong>
+                      {% endif %}
+                    </select>
+                 
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label for="bussiness_status" class="col-sm-2 col-form-label">Bussiness Status</label>
+                <div class="col-sm-10">
+
+                  <select required name="bussiness_status"  class="form-control">
+                     <option value="">Choose bussiness status</option>                   
+
+                     <option>Un-registered</option>
+                     <option>Registered</option>
+                  </select>
+                 
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="bussiness_class" class="col-sm-2 col-form-label">Bussiness Class</label>
+                <div class="col-sm-10">
+
+                  <select required name="bussiness_class"  class="form-control">
+                     <option value="">Choose bussiness class</option>                   
+
+                      <option>Public Quota</option>
+                      <option>Public Unquota</option>
+                      <option>Private Limited</option>
+                      <option>Register Business</option>
+                      <option>Govt. Parastatal</option>
+                  </select>
+                 
+                </div>
+              </div>
+           
+
+              <div class="form-group row">
+                <label for="registration_number" class="col-sm-2 col-form-label">Rc Number</label>
+                <div class="col-sm-10">
+                   <input type="text"   required class="form-control"  name="registration_number"> 
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label  for="bussiness_ownership_type" class="col-sm-2 col-form-label">Business Ownership Type</label>
+                <div class="col-sm-10">
+
+                  <select required name="bussiness_ownership_type"  class="form-control">
+                     <option value="">Choose Ownership Type</option>                   
+
+                       <option>Enterprise and Venture</option>
+                        <option>Partnership</option>
+                        <option>Private Limited</option>
+                        <option>Sole Proprietorship</option>
+                        <option>Public Limited</option>
+                        <option>Cooperative Society</option>
+                        <option>Club</option>
+                        <option>NGO/Charitable Organization</option>
+                        <option>Association</option>
+                        <option>Incorporate Trustee</option>
+                        <option>Private Unlimited</option>
+                        <option>Limited by Guarantee</option>
+                        <option>Labour Union</option>
+                  </select>
+                 
+                </div>
+              </div>
+
+
+               <div class="form-group row">
+                <label for="bussiness_name" class="col-sm-2 col-form-label">Business Name</label>
+                <div class="col-sm-10">
+                  <input type="text" required class="form-control"  name="bussiness_name">
+                </div>
+              </div>
+
+ 
+                 
+               <div class="form-group row">
+                <label for="bussiness_owner" class="col-sm-2 col-form-label">Business Owner</label>
+                <div class="col-sm-10">
+                  <input type="text" required class="form-control"  name="bussiness_owner">
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label for="bussiness_address" class="col-sm-2 col-form-label">Business address</label>
+                <div class="col-sm-10">
+                  <input type="text" required class="form-control"  name="bussiness_address">
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label for="phone_number" class="col-sm-2 col-form-label">Phone</label>
+                <div class="col-sm-10">
+                  <input type="text" required class="form-control"  name="phone_number">
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label for="email" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                  <input type="text" required class="form-control"  name="email">
+                </div>
+              </div>
+
+               
+            
+                 <div class="form-group row"> 
+                    <div class="col-sm-2 offset-md-2">
+                        <input type="submit"  class="btn btn-primary" value="Next">
+                    </div>
+                </div>
+            </form>
+             </div>
+      </div>
+
+
+     
+
+<!-- Modal -->
+    <div id="companyDataPreviewModal" class="modal fade" role="dialog" data-backdrop="static">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title">Record Preview</h5>
+             
+          </div>
+        <form action="/tin/save-company/" method="POST">
+          {% csrf_token %}
+          <div class="modal-body">
+            <div class="container">
+              <div class="row border-bottom pt-3 "> 
+
+                <div class="col-sm">
+                  LGA
+                </div>
+                <div class="col-sm">
+                  <input type="text" required name="lga" value="{{ lga }}"  class="no-field-style lead text-uppercase" >
+                </div>
+                 
+              </div>
+
+               <div class="row border-bottom pt-3 ">
+                <div class="col-sm">
+                  Institution
+                </div>
+                <div class="col-sm">
+                  <input type="text" required name="institution" value="{{ institution }}"  class="no-field-style lead text-uppercase" >
+                </div>
+                 
+              </div>
+
+
+               <div class="row border-bottom pt-3 ">
+                <div class="col-sm">
+                  Institution Type
+                </div>
+                <div class="col-sm">
+                  <input type="text" required name="institution_type" value="{{ institution_type }}"  class="no-field-style lead text-uppercase" >
+                </div>
+                 
+              </div>
+
+
+               <div class="row border-bottom pt-3 ">
+                <div class="col-sm">
+                  Institution Category
+                </div>
+                <div class="col-sm">
+                  <input type="text" required name="institution_category" value="{{ institution_category }}"  class="no-field-style lead text-uppercase" >
+                </div>
+                 
+              </div>
+
+               <div class="row border-bottom pt-3 ">
+                <div class="col-sm">
+                  Bussiness Status
+                </div>
+                <div class="col-sm">
+                  <input type="text" required name="bussiness_status" value="{{ bussiness_status }}"  class="no-field-style lead text-uppercase" >
+                </div>
+                 
+              </div> 
+
+               <div class="row border-bottom pt-3 ">
+                <div class="col-sm">
+                  Bussiness Class
+                </div>
+                <div class="col-sm">
+                  <input type="text" required name="bussiness_class" value="{{ bussiness_class }}"  class="no-field-style lead text-uppercase" >
+                </div>
+                 
+              </div>
+
+               <div class="row border-bottom pt-3 ">
+                <div class="col-sm">
+                  RC Number
+                </div>
+                <div class="col-sm">
+                  <input type="text" required name="registration_number" value="{{ registration_number }}"  class="no-field-style lead text-uppercase" >
+                </div>
+                 
+              </div>
+
+               <div class="row border-bottom pt-3 ">
+                <div class="col-sm">
+                  Business Ownership Type
+                </div>
+                <div class="col-sm">
+                  <input type="text" required name="bussiness_ownership_type" value="{{ bussiness_ownership_type }}"  class="no-field-style lead text-uppercase" >
+                </div>
+                 
+              </div>
+
+               <div class="row border-bottom pt-3 ">
+                <div class="col-sm">
+                  Bussiness name
+                </div>
+                <div class="col-sm">
+                  <input type="text" required name="bussiness_name" value="{{ bussiness_name }}"  class="no-field-style lead text-uppercase" >
+                </div>
+                 
+              </div>
+
+               <div class="row border-bottom pt-3 ">
+                <div class="col-sm">
+                  Bussiness Owner
+                </div>
+                <div class="col-sm">
+                  <input type="text" required name="bussiness_owner" value="{{ bussiness_owner }}"  class="no-field-style lead text-uppercase" >
+                </div>
+                 
+              </div>  
+               <div class="row pt-3 ">
+                <div class="col-sm">
+                  Bussiness Address
+                </div>
+                <div class="col-sm">
+                  <input type="text" required name="bussiness_address" value="{{ bussiness_address }}"  class="no-field-style lead text-uppercase" >
+                </div>
+                 
+              </div>
+
+              <div class="row pt-3 ">
+                <div class="col-sm">
+                  Phone
+                </div>
+                <div class="col-sm">
+                  <input type="text" required name="phone_number" value="{{ phone_number }}"  class="no-field-style lead text-uppercase" >
+                </div>
+                 
+              </div>
+
+              <div class="row pt-3 ">
+                <div class="col-sm">
+                  Email
+                </div>
+                <div class="col-sm">
+                  <input type="text" required name="email" value="{{ email }}"  class="no-field-style lead text-uppercase" >
+                </div>
+                 
+              </div>
+              <input type="hidden" name="tin" value="{{ tin }}"  class="no-field-style lead text-uppercase" >
+
+
+
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="continueEditingPage()">Back</button>
+            <input type="submit"  class="btn btn-success" value="Save"></button>
+          </div>
+        </form>
+
+        </div>
+
+      </div>
+    </div>
+
+<!-- new record created modal -->
+ 
+
+
+    <div class="modal fade" id="recordCreated">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Record created</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Record has been Created </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <!-- modal existing record -->
+
+    <div class="modal fade" id="recordAlreadyExistModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Record Already created</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Company Record has already been Created </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+   <div class="modal fade" id="wrongDataModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Wrong Input Data</h5>
+           
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Please Use correct Data </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+           <button type="button" class="btn btn-primary" onclick="continueEditingPage()">Ok</button> 
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  
+
+
+  <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © CoreIGR 2018</small>
+        </div>
+      </div>
+    </footer>
+
+
+    
+
+ 
+    <!-- Logout Modal-->
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% include 'partials/js_links.html' %}
+
+
+        {% if messages %}
+
+          {% for message  in messages %}
+
+            {% if  "company_preview" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#companyDataPreviewModal').modal('show');
+                
+            </script>
+         
+
+            {%elif  "record_created" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#recordCreated').modal('show');
+                     
+                
+            </script>
+
+            {%elif  "record_already_created" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#recordAlreadyExistModal').modal('show');
+                     
+                
+            </script>
+
+
+    
+              {%elif  "wrong_data" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongDataModal').modal('show');
+                     
+                
+            </script>
+            
+            {% endif %}
+
+              
+          {% endfor %}
+
+        {% endif %}
+  </div>
+</body>
+<script>
+  function continueEditingPage () {
+    // body... 
+   
+    window.history.back();
+  }
+</script>
+
+
+</html>

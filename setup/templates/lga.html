@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | TIN Setup</title>
+ {% include 'partials/css_head_links.html' %}
+<link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet"> 
+    <style>
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+
+
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+         <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" placeholder="Search for TIN" required>
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">TIN SETUP </li>
+      </ol>
+      <!-- Example DataTables Card-->
+      <div class="card mb-3">
+        <div class="card-header">
+          <i class="fa fa-table"></i> Local Government Areas</div>
+        <div class="card-body">
+
+          <div class="table-responsive">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStateCodeModal" style="float: right;margin-left: 2%;margin-right: 20px;"> Change State Code <strong class="text-dark bg-success p-2 rounded">{{state_code_value}}</strong></button>
+              <a href="/set-up/add-lga/" type="button" class="btn btn-primary"  style="float: right;margin-left: 20%;margin-right: 20px;">Add LGA</a>
+
+
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+             {% if lgas %}
+
+                <tr>
+                  <th>LGA</th>
+                  <th>Code</th>
+                  <th>Options</th>
+                 
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>LGA</th>
+                  <th>Code</th>
+                  <th>Options</th>
+                  
+                </tr>
+              </tfoot>
+             
+
+
+
+              <tbody>
+                {% for lga in lgas %}
+                <tr> 
+                  <td>{{ lga.local_government_name }}</td>  
+
+                  <td>{{ lga.local_government_code }}</td> 
+
+                 <!-- data-target="#editOfficeModal" -->
+                  <td>
+
+  <button type="button" class="btn btn-outline-primary btn-sm edit-lga"  data-office_id="{{lga.id}}" data-lga_code="{{lga.local_government_code}}" data-lga_name="{{ lga.local_government_name }}" data-toggle="modal" >Edit</button>
+ 
+                  
+                   
+                  </td>
+                  
+                </tr>
+                {% endfor %}
+              </tbody>
+              {% else %}
+                 <div class="alert alert-warning float-left"  role="alert">
+                    No Local Government Areas Yet
+                </div>
+              {% endif %}
+              
+            </table>
+ 
+          </div>
+        </div>
+        <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
+      </div>
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © Your CoreIGR 2018</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+
+
+      <div class="modal fade" id="editOfficeModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="editOfficeModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Edit Local Goverment  </h5>
+              
+            </div>
+            <form action="/set-up/edit-lga/" method="POST">
+
+               {% csrf_token %}
+              <div class="modal-body">
+
+                <input type="hidden" class="form-control" name="office_id"  id="Office_id">
+                
+                  <div class="form-group">
+                    <label for="password" class="col-form-label">LGA Name</label>
+
+                    <select class="form-control form-control-sm lga-name" name="lga_name">
+                        <option>Choose LGA</option>
+
+                        <option>Barkin Ladi</option>
+                        <option>Bassa</option>
+                        <option>Bokkos</option>
+                        <option>Jos East</option>
+                        <option>Jos North</option>
+                        <option>Jos South</option>
+                        <option>Kanam</option>
+                        <option>Kanke</option>
+                        <option>Langtang North</option>
+                        <option>Langtang South</option>
+                        <option>Mangu</option>
+                        <option>Mikang</option>
+                        <option>Pankshin</option>
+                        <option>Quaan Pan</option>
+                        <option>Riyom</option>
+                        <option>Shendam</option>
+                        <option>Wase</option>
+                        <option>Others</option>
+
+                        
+                      </select>
+
+                   
+                  </div>
+
+
+                   <div class="form-group">
+                    <label for="password" class="col-form-label">LGA code</label>
+                    <input type="text" class="form-control lga-code" name="lga_code" required >
+                  </div>
+
+
+                   <div class="form-group">
+                    <label for="password" class="col-form-label">Your Password</label>
+                    <input type="Password" class="form-control" name="password" required >
+                  </div>
+                  
+                
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <input type="submit" class="btn btn-primary" value="Edit LG">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+   
+
+      <div class="modal fade" id="addStateCodeModal" tabindex="-1" role="dialog" aria-labelledby="addStateCodeModalTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addStateCodeModalTitle">Add State Code</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <!-- -------------------------------------------------------------------- -->
+            
+              <form action="/set-up/save-state-code/" method="POST"> 
+                {% csrf_token %}
+                <div class="form-group">
+
+                    <label for="state_code">State Code</label>
+                    <input type="text" class="form-control" placeholder="set new state code" id="state_code" maxlength="2" maxlength="2" value="{{ state_code }}" name="state_code">
+
+
+
+                    
+                    <label for="password" class="col-form-label">Password</label>
+                    <input type="Password" class="form-control" name="password" required >
+                  
+                                
+                </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <input type="submit"  class="btn btn-primary" value="Update State Code">
+                  </div>
+              </form>
+
+             
+            </div>
+           
+          </div>
+        </div>
+      </div>
+    <!-- Logout Modal-->
+
+
+      <div class="modal fade" id="recordUpdatedModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Record Updated</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p>  Record Updated Successful</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="wrongPasswordModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Wrong Password</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p> Please type correct password</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+ <!-- <button type="button" class="btn btn-primary" onclick="continueEditingPage()">Ok</button> -->
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="modal fade" id="wrongDataModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Wrong Input Data</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p> Please type correct Data</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+
+    <div class="modal fade" id="stateCodeUpdateModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Update successfull</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p> State code Updated</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+
+
+<div class="modal fade" id="accessDeniedModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Access Denied</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p> You Dont have right to perform this action</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+
+
+
+     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+{% include 'partials/js_links.html' %}
+  </div>
+</body>
+  <script>
+
+    function continueEditingPage () {
+      // body... 
+     
+      window.history.back();
+    }
+           
+        $(document).ready(function() {
+            $("input:text")
+                .focus(function () { $(this).select(); } )
+                .mouseup(function (e) {e.preventDefault(); });
+        });
+
+
+        $(".edit-lga").on("click", function () {
+          /* body... */
+
+          $('#editOfficeModal').modal('show');
+
+          
+
+         
+          $('.lga-name').val($(this).attr('data-lga_name'))
+          $('.lga-code').val($(this).attr('data-lga_code'))
+          $('#Office_id').val($(this).attr('data-office_id'))
+
+        
+
+        })
+
+
+
+ 
+  </script>
+
+         {% if messages %}
+
+          {% for message  in messages %}
+
+            {% if  "record_updated" in message.extra_tags %}
+             
+              <script>    
+
+                
+                     $('#recordUpdatedModal').modal('show');
+                
+            </script>
+
+            {% elif  "wrong_pass" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongPasswordModal').modal('show');
+                
+            </script>
+
+            {% elif  "wrong_data" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongDataModal').modal('show');
+                
+            </script>
+
+            {% elif  "state_updated" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#stateCodeUpdateModal').modal('show');
+                
+            </script>
+
+            {% elif  "access_denied" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#accessDeniedModal').modal('show');
+                
+            </script>
+         
+
+         
+
+            
+            {% endif %}
+
+              
+          {% endfor %}
+
+        {% endif %}
+
+
+
+</html>
+
+
+
+

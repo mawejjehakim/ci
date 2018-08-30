@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Charges</title>
+ {% include 'partials/css_head_links.html' %}
+
+    <style>
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+
+    
+    .loader {
+      border: 3px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 2px solid #3498db;
+      width: 30px;
+      display: inline-block;
+      vertical-align: bottom;
+      height: 30px;
+      /*background-color:  #f2d7d5 ;*/
+      margin: auto; 
+      display: none;
+      -webkit-animation: spin 2s linear infinite; /* Safari */
+      animation: spin 2s linear infinite;
+    }
+
+     
+
+    @keyframes spin {
+      10% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+     
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" required placeholder="Search for TIN" >
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Data Management</li>
+      </ol>
+      <!-- Example DataTables Card-->
+      <div class="card mb-3">
+        <div class="card-header">
+          <i class="fa fa-table"></i> Manage Data &nbsp;&nbsp;&nbsp;  <div class="loader"></div> 
+        </div>
+        <div class="card-body">
+ 
+ 
+
+             <button class="btn btn-primary" data-toggle="modal" data-target="#dataBackUpModal"  style="margin-right: 20px;" >Backup Data</button>
+
+             <button class="btn btn-info" data-toggle="modal" data-target="#dataRestoreModal"  style="margin-right: 20px;" >Restore Data</button>
+
+            <button  class="btn btn-primary" data-toggle="modal" data-target="#mediaDataBackUpModal" style="margin-right: 20px;" >Backup Media Data</button>
+
+            <button class="btn btn-info"  data-toggle="modal" data-target="#mediaDataRestoreModal" style="margin-right: 20px;" >Restore Media Data</button>
+
+ 
+       
+      </div>
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © Your CoreIGR 2018</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+
+
+ 
+      <div class="modal fade formModal" id="dataBackUpModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Password Confirmation</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Back Up Data</p>
+
+
+              <!-- -------------------------------------------------------------------- -->
+            
+              <form action="/set-up/data-backup/" class="manage-data" method="POST"> 
+                {% csrf_token %}
+
+                <div class="form-group">
+
+                   <div class="form-check">
+                     <input type="checkbox" class="form-check-input" type="radio" class="form-control" name="clean_old_data" value="T">  &nbsp;&nbsp;&nbsp;
+                      <label class="form-check-label">
+                        Clean Back up Directory 
+                      </label>
+                    </div>
+
+
+                    <label for="password" class="col-form-label"> Password </label>
+                    <input type="Password" class="form-control" name="password" required >
+                  
+                                
+                </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <input type="submit"  class="btn btn-primary" value="backup data">
+                  </div>
+
+              </form>
+
+             
+            </div>
+           
+          </div>
+        </div>
+      </div>
+
+        <div class="modal fade formModal" id="dataRestoreModal" tabindex="-1" role="dialog"  aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Password Confirmation</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Back Restore</p>
+
+
+              <!-- -------------------------------------------------------------------- -->
+            
+              <form action="/set-up/data-restore/" class="manage-data" method="POST"> 
+                {% csrf_token %}
+
+                <div class="form-group">
+
+                      
+                    <label for="password" class="col-form-label">Password</label><br>
+                    <input type="Password" class="form-control" name="password" required >
+                  
+                                
+                </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <input type="submit"  class="btn btn-primary" value="Data Restore">
+                  </div>
+
+              </form>
+
+             
+            </div>
+           
+          </div>
+        </div>
+      </div>
+
+        <div class="modal fade formModal" id="mediaDataBackUpModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" >Password Confirmation</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Media Data Back Up</p>
+
+
+              <!-- -------------------------------------------------------------------- -->
+            
+              <form action="/set-up/media-data-backup/" class="manage-data" method="POST"> 
+                {% csrf_token %}
+
+                <div class="form-group">
+
+                    <div class="form-check">
+                     <input type="checkbox" class="form-check-input" type="radio" class="form-control" name="clean_old_data" value="T">  &nbsp;&nbsp;&nbsp;
+                      <label class="form-check-label">
+                        Clean Back up Directory 
+                      </label>
+                    </div>
+ 
+                    <label for="password" class="col-form-label">Password</label><br>
+                    <input type="Password" class="form-control" name="password" required >
+                  
+                                
+                </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <input type="submit"  class="btn btn-primary" value="Back Media Data">
+                  </div>
+
+              </form>
+
+             
+            </div>
+           
+          </div>
+        </div>
+      </div>
+
+        <div class="modal fade formModal" id="mediaDataRestoreModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addStateCodeModalTitle">Password Confirmation</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Media Data Restore</p>
+
+
+              <!-- -------------------------------------------------------------------- -->
+            
+              <form action="/set-up/media-data-restore/" class="manage-data" method="POST"> 
+                {% csrf_token %}
+
+                <div class="form-group">
+ 
+                    
+                    <label for="password" class="col-form-label">Password</label><br>
+                    <input type="Password" class="form-control" name="password" required >
+                  
+                                
+                </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <input type="submit"  class="btn btn-primary" value="Media Data Restore">
+                  </div>
+
+              </form>
+
+             
+            </div>
+           
+          </div>
+        </div>
+      </div>
+
+     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  {% include 'partials/js_links.html' %}
+
+   <script>
+
+
+             $(".manage-data").submit(function(e) {
+
+
+              var form = $(this);
+              var url = form.attr('action');
+
+              $(".loader").css("display", "inline-block")
+              $(".fade").hide()
+
+
+              $.ajax({
+
+                     type: "POST",
+                     url: url,
+                     data: form.serialize(), // serializes the form's elements.
+                     success: function(data) {
+
+            
+                       if (data.res =="wrong_pass") {  alert("message?: DOMString")
+
+                         $(".loader").css("display", "none")
+
+                         
+                           
+                           alert("Password is wrong")
+                           
+                        }
+                        else {
+                           $(".loader").css("display", "none")
+                          alert(data.res)
+
+                        }
+                         
+                    },
+                    failure: function(data) { 
+                        alert(data.res)
+                    }
+
+
+                   });
+
+              e.preventDefault(); // avoid to execute the actual submit of the form.
+          });
+         
+            
+   
+    </script>
+
+ 
+      
+
+    </body>
+</body>
+<script>
+   
+</script>
+
+
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Edit Company</title>
+ {% include 'partials/css_head_links.html' %} 
+  <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+ <style>
+   .no-field-style{
+    border: none;
+    background-color: transparent;
+   }
+    
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" required placeholder="Search for TIN" >
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Edit Company</li>
+      </ol>
+      
+    <div class="card">
+      <h5 class="card-header">Edit Company</h5>
+     <div class="card-body">
+      <form action="/tin/update-company/" method="POST">
+               {% csrf_token %}
+
+               <input type="hidden" name="tin" value="{{ company_obj.tin.id}} ">
+               <input type="hidden" name="id" value="{{ company_obj.id}} ">
+              
+              <div class="form-group row">
+                <label for="lga" class="col-sm-2 col-form-label">LGA</label>
+                <div class="col-sm-10">
+
+
+                  <select required name="local_government"  class="form-control">
+                       <option value="{{company_obj.local_government}}">{{company_obj.local_government}}</option>
+
+                    {% if LGAs %}
+
+                        {% for LGA in LGAs %}
+
+                            <option > {{LGA.local_government_name}} </option>"
+
+                        {% endfor %}
+
+
+                 
+                    {% else %}
+                        <strong> no offices yet </strong>
+                    {% endif %}
+                     
+
+                    </select>
+                 
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="institution" class="col-sm-2 col-form-label">Institution </label>
+                <div class="col-sm-10">
+
+                  <select required name="institution"  class="form-control">
+                      <option value="{{company_obj.institution}}">{{company_obj.institution}}</option>
+                      
+                      <option>Non-Government</option>
+                      <option>Government</option>
+                  </select>
+                 
+                </div>
+              </div>
+
+
+              <div class="form-group row">
+                <label for="institution_type" class="col-sm-2 col-form-label">Institution Type</label>
+                <div class="col-sm-10">
+
+                  <select required name="institution_type"  class="form-control">
+                      <option value="{{company_obj.institution_type.id}}">{{company_obj.institution_type.type_name}}</option>
+
+                  {% if institution_types %}
+
+                      {% for institution_type in institution_types %}
+
+                          <option value="{{institution_type.id}}"> {{institution_type.type_name}} </option>"
+
+                      {% endfor %}
+
+               
+                  {% endif %}
+                  </select>
+                 
+                </div>
+              </div>
+
+
+ 
+
+     
+              <div class="form-group row">
+                <label for="institution_category" class="col-sm-2 col-form-label">Institution Category</label>
+                <div class="col-sm-10">
+
+                  <select required name="institution_category"  class="form-control">                   
+
+                      <option value="{{company_obj.institution_category.id}}">{{company_obj.institution_category.category_name}}</option>
+
+                      {% if institution_categories %}
+
+                          {% for institution_category in institution_categories %}
+
+                              <option value="{{institution_category.id}}"> {{ company_obj.institution_category.category_name }} </option>"
+
+                          {% endfor %}
+
+                   
+                      {% else %}
+                          <strong> no offices yet </strong>
+                      {% endif %}
+                    </select>
+                 
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label for="bussiness_status" class="col-sm-2 col-form-label">Bussiness Status</label>
+                <div class="col-sm-10">
+
+                  <select required name="bussiness_status"  class="form-control">
+                     <option value="{{company_obj.bussiness_status}}">{{company_obj.bussiness_status}}</option>                   
+
+                     <option>Un-registered</option>
+                     <option>Registered</option>
+                  </select>
+                 
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="bussiness_class" class="col-sm-2 col-form-label">Bussiness Class</label>
+                <div class="col-sm-10">
+
+                  <select required name="bussiness_class"  class="form-control">
+                     <option value="{{company_obj.bussiness_class}}">{{company_obj.bussiness_class}}</option>                   
+
+                      <option>Public Quota</option>
+                      <option>Public Unquota</option>
+                      <option>Private Limited</option>
+                      <option>Register Business</option>
+                      <option>Govt. Parastatal</option>
+                  </select>
+                 
+                </div>
+              </div>
+           
+
+              <div class="form-group row">
+                <label for="registration_number" class="col-sm-2 col-form-label">Rc Number</label>
+                <div class="col-sm-10">
+                   <input type="text"   required class="form-control" value="{{company_obj.registration_number}}"  name="registration_number"> 
+                </div>
+              </div>
+
+       
+              <div class="form-group row">
+                <label  for="bussiness_ownership_type" class="col-sm-2 col-form-label">Business Ownership Type</label>
+                <div class="col-sm-10">
+
+                  <select required name="bussiness_ownership_type"  class="form-control">
+                     <option value="{{company_obj.bussiness_ownership_type}}">{{company_obj.bussiness_ownership_type}}</option>                   
+
+                       <option>Enterprise and Venture</option>
+                        <option>Partnership</option>
+                        <option>Private Limited</option>
+                        <option>Sole Proprietorship</option>
+                        <option>Public Limited</option>
+                        <option>Cooperative Society</option>
+                        <option>Club</option>
+                        <option>NGO/Charitable Organization</option>
+                        <option>Association</option>
+                        <option>Incorporate Trustee</option>
+                        <option>Private Unlimited</option>
+                        <option>Limited by Guarantee</option>
+                        <option>Labour Union</option>
+                  </select>
+                 
+                </div>
+              </div>
+
+
+               <div class="form-group row">
+                <label for="bussiness_name" class="col-sm-2 col-form-label">Business Name</label>
+                <div class="col-sm-10">
+                  <input type="text" required class="form-control" value="{{company_obj.bussiness_name}}" name="bussiness_name">
+                </div>
+              </div>
+ 
+ 
+               <div class="form-group row">
+                <label for="bussiness_owner" class="col-sm-2 col-form-label">Business Owner</label>
+                <div class="col-sm-10">
+                  <input type="text" required class="form-control" value="{{company_obj.bussiness_owner}}"  name="bussiness_owner">
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label for="bussiness_address" class="col-sm-2 col-form-label">Business address</label>
+                <div class="col-sm-10">
+                  <input type="text" required class="form-control" value="{{company_obj.bussiness_address}}" name="bussiness_address">
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label for="phone_number" class="col-sm-2 col-form-label">Phone</label>
+                <div class="col-sm-10">
+                  <input type="text" required class="form-control" value="{{company_obj.phone_number}}"  name="phone_number">
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label for="email" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                  <input type="text" required class="form-control" value="{{company_obj.email}}"  name="email">
+                </div>
+              </div>
+
+               
+            
+                 <div class="form-group row"> 
+                    <div class="col-sm-2 offset-md-2">
+                        
+                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmPassModal">Continue</button> 
+                    </div>
+                </div>
+
+
+                 <div class="modal fade" id="confirmPassModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" >Password Confirmation</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body"> 
+
+                                <div class="form-group">                     
+
+                                    
+                                    <label for="password" class="col-form-label">Password</label>
+                                    <input type="Password" class="form-control" name="password" required >
+                                  
+                                                
+                                </div>
+                                  <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    
+
+                                       <input type="submit"  class="btn btn-primary" value="Update">
+                                     
+
+                                  </div>
+                             
+                             
+                            </div>
+                     
+                          </div>
+                        </div>
+                      </div>
+
+            </form>
+             </div>
+      </div>
+      </div>
+      </div>
+
+
+     
+
+<!-- Modal -->
+   
+<!-- new record created modal -->
+ 
+
+
+    <div class="modal fade" id="recordUpdatedModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Record Updated</h5>
+           
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Record has been Updated successfully </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <a href="/tin/companies/" class="btn btn-success" >OK</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+    <div class="modal fade" id="wrongDataModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Invalid data</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Please Type Correct data </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="continueEditingPage()">Ok</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+      <div class="modal fade" id="wrongPassModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Invalid Paassword</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Please Type Correct Password </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="continueEditingPage()">Ok</button>
+        </div>
+        
+      </div>
+    </div>
+
+   < 
+
+ 
+    <!-- Logout Modal-->
+
+
+     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% include 'partials/js_links.html' %}
+
+
+        {% if messages %}
+
+          {% for message  in messages %}
+
+            {% if  "record_updated" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#recordUpdatedModal').modal('show');
+                
+            </script>
+ 
+
+            {% elif  "wrong_data" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongDataModal').modal('show');
+                
+            </script>
+
+            {% elif  "wrong_pass" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongPassModal').modal('show');
+                
+            </script>
+
+
+           
+
+            
+         
+
+             
+            {% endif %}
+
+              
+          {% endfor %}
+
+        {% endif %}
+
+        <script>
+           
+        $(document).ready(function() {
+            $("input:text")
+                .focus(function () { $(this).select(); } )
+                .mouseup(function (e) {e.preventDefault(); });
+        });
+
+         function continueEditingPage () {
+          // body... 
+         
+          window.history.back();
+        }
+
+
+        </script>
+  </div>
+</body>
+ 
+
+
+</html>

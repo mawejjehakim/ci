@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Change vehicle Revalidation</title>
+  {% load static %}
+ {% include 'partials/css_head_links.html' %}
+
+
+  
+    <style>
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" placeholder="Search for TIN" required>
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active"> Revalidate Vehicle</li>
+      </ol> 
+ 
+
+          
+          <div class="row">
+          <div class="col">
+           
+
+            <div class="card border-secondary">
+              <div class="card-header"> Vehicle Details</div>
+              
+              <div class="card-body">   
+             
+              <ul class="list-group list-group-flush">
+                 
+
+                 
+                   <div class="row  border-bottom py-2"> 
+
+                    <div class="col-sm-5">
+                      Vehicel Type
+                    </div>
+                    <div class="col lead text-left text-capitalize">
+                      {{ vehicle_obj.vehicle_model }}
+                    </div>
+                     
+                 
+                  </div>
+                
+                <div class="row border-bottom py-2 "> 
+
+                    <div class="col-sm-5">
+                      Vehicle Category
+                    </div>
+                    <div class="col lead text-left text-capitalize ">
+                     {{ vehicle_obj.vehicle_category }} 
+                    </div>
+                     
+                </div>
+                <div class="row border-bottom py-2 "> 
+
+                    <div class="col-sm-5">
+                      Chassis Number
+                    </div>
+                    <div class="col lead text-left text-capitalize ">
+                     {{ vehicle_obj.chassis_number }} 
+                    </div>
+                     
+                  </div>
+                
+              
+               
+                  <div class="row  py-2 "> 
+
+                      <div class="col-sm-5">
+                        Old Plate Number
+                      </div>
+                      <div class="col lead text-left text-capitalize">
+                         
+                          {{vehicle_obj.number_plate.number_plate}}
+                        
+                      </div>
+                       
+                    </div>
+                
+              
+              
+            </div>        
+             
+
+             </div>
+
+              <div class="card my-2 border-primary">
+              <div class="card-header"> {{vehicle_owner_type}} Details</div>
+              
+              <div class="card-body">   
+             
+              
+                  <div class="row  border-bottom py-2 "> 
+
+                      <div class="col-sm-5">
+                        TIN
+                      </div>
+                      <div class="col lead text-left text-capitalize">
+                         
+                          {{vehicle_owner_tin}}
+
+ 
+                        
+                      </div>
+                       
+                    </div>
+                 
+                   <div class="row  "> 
+
+                    <div class="col-sm-5">
+                     Name
+                    </div>
+                    <div class="col lead text-left text-capitalize ">
+                     {{ vehicle_owner_name }} 
+                    </div>
+                     
+                  </div>
+                 
+              
+              
+              
+            </div>        
+             
+             </div>
+
+             
+
+
+
+             
+           </div>
+
+
+
+          <div class="col-sm-7">
+             
+           
+
+                 <form class="card border-info " action="/mla/save-vehicle-revalidation/" method="POST">
+                   {% csrf_token %}
+                  <div class="card-header">New Plate Number</div>
+                  <div class="card-body text-info">
+                   
+                    <input type="hidden" name="current_owner_tin" value="{{individual_obj.tin.id}}">
+
+                    <input type="hidden" name="chassis_number" value="{{vehicle_obj.chassis_number}}">
+
+                    <input type="hidden" name="current_owner_tin" value="{{vehicle_obj.current_owner_tin.id}}">
+                    
+                      <div class="form-group">
+                        <label for="tin">Plate Number </label>
+                        <input type="text" class="form-control" id="tin" name="number_plate" maxlength="10">
+                      </div>
+
+                      <input type="submit" value="Revalidate" class="btn btn-primary">
+                   
+                  </div>
+                </form>
+
+               
+ 
+              </div>
+            
+          </div>
+        </div>
+          </div>
+          
+      
+       
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © Your CoreIGR 2018</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+
+ 
+ <!-- Modal -->
+    <div id="individualVehicleDataPreviewModal" class="modal fade" role="dialog" data-backdrop="static">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title">Record Preview</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          from hakim to new user
+        </div>
+
+      </div>
+    </div>
+
+  <!-- new record created modal -->
+ 
+
+ <div class="modal fade " data-backdrop="static" tabindex="-1" id="revalidateSuccessfull" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+
+
+
+  <div class="modal-dialog modal-lg">
+        
+ 
+
+        <div class="modal-content px-3">
+           <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Transaction Review</h5>
+            <a href="/mla/get-vehicle-revalidation/">  
+              <span aria-hidden="true">&times;</span>
+            </a>
+          </div>
+         
+
+     
+             
+
+
+               <div class="card mb-3">
+        <div class="card-header">
+          <i class="fa fa-table"></i> Tranasction Assessment
+        </div>
+        <div class="card-body">
+          <div class="card border-bottom p-3 my-3" >
+
+          <div class="row">
+            <div class="col-sm">
+             Assessment Type
+            </div>
+            <div class="col-sm lead text-uppercase">
+              
+               vehicle revalidation
+              
+            </div>
+             
+          </div>
+           <div class="row">
+            <div class="col-sm">
+             {{tin_for}} TIN 
+            </div>
+            <div class="col-sm lead text-uppercase">
+              
+              {{current_owner_tin}}
+              
+            </div>
+             
+          </div>
+
+           <div class="row">
+            <div class="col-sm">
+             Vehicle Category 
+            </div>
+            <div class="col-sm lead text-uppercase">
+              
+              {{vehicle_category}}
+              
+            </div>
+             
+          </div>
+
+           <div class="row">
+            <div class="col-sm">
+             Chassis number
+            </div>
+            <div class="col-sm lead text-uppercase">
+              
+              {{chassis_number}}
+              
+            </div>
+             
+          </div>
+           <div class="row">
+            <div class="col-sm">
+             Old Number Plate
+            </div>
+            <div class="col-sm lead text-uppercase">
+              
+               {{old_plate_number}}
+              
+            </div>
+             
+  
+          </div>
+
+           <div class="row">
+            <div class="col-sm">
+             New Number Plate
+            </div>
+            <div class="col-sm lead text-uppercase">
+              
+               {{new_plate_number}}
+              
+            </div>
+             
+          </div>
+
+            
+         
+              </div>
+
+          <div class="table-responsive">
+             
+             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+             {% if transaction_assessments %}
+
+                <tr>
+                <tr>
+                   <th>Transaction Code</th> 
+                  <th>Particular</th> 
+                  <th>Amount</th> 
+
+                </tr>
+                 
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                <tr>
+                  <th>Transaction Code</th> 
+                  <th>Particular</th> 
+                  <th>Amount</th> 
+
+                </tr>
+                  
+                </tr>
+              </tfoot> 
+
+              <tbody>
+                {% for transaction_assessment in transaction_assessments %}
+                <tr> 
+                  <td>{{ transaction_assessment.transaction_code }}</td>
+                  <td>{{ transaction_assessment.particulars }}</td>
+                  <td>{{ transaction_assessment.amount }}</td>
+                   
+                  
+                </tr>
+              {% endfor %}
+              </tbody>
+              {% else %}
+                 <div class="alert alert-warning float-left"  role="alert">
+                     No Assesments generated Yet
+                </div>
+              {% endif %}
+              
+            </table>
+
+ 
+          </div>
+        </div>
+        
+      </div>
+            <div class="modal-footer">
+                
+                <a href="/mla/get-vehicle-revalidation/" class="btn btn-primary"  >Okay</a>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+      <div class="modal fade" id="wrongPlateModal" data-backdrop = "static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Plate assigned</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> This plate number does not exist </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+              <button type="button" class="btn btn-primary"  onclick="continueEditingPage()">OK</button> 
+        </div>
+        
+      </div>
+    </div>
+
+    
+
+
+  </div>
+  <div class="modal fade" id="changeOthersUnavailable" data-backdrop = "static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header bg-warnig">
+          <h5 class="modal-title">Charge Unavailable</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p>This type of charge is not available </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+              <button type="button" class="btn btn-primary"  onclick="continueEditingPage()">OK</button> 
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+   <div class="modal fade" id="wrongDataModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Wrong  Data</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Please type correct data </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary"  onclick="continueEditingPage()">OK</button> 
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="plateNotIssuedModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Plate Un assigned</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> This Plate is not yet assigned to any Office </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary"  onclick="continueEditingPage()">OK</button> 
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  
+
+<div class="modal fade" id="exceptionModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header bg-danger">
+          <h5 class="modal-title">Error!!</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p>Something wrong happened try agin </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <a href="/mla/get-tin-info/" class="btn btn-primary"  >Ok</a> 
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="plateUsedModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Plate taken</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> This Number Plate is already Assigned to a certain car</p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary"  onclick="continueEditingPage()">OK</button> 
+        </div>
+        
+      </div>
+    </div>
+  </div>
+    
+    
+  <div class="modal fade" id="plateNotForOfficeModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Plate Not for your office</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Plate Number Not assigned for this Office </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary"  onclick="continueEditingPage()">OK</button> 
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+     <div class="modal fade" id="unAssignedPlateModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Plate Not Isssued</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> This Number Plate is not issued yes</p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary"  onclick="continueEditingPage()">OK</button> 
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+    <!-- Logout Modal-->
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include 'partials/js_links.html' %}
+    {% if messages %}
+
+      {% for message  in messages %}
+
+        {% if  "plate_unassigned" in message.extra_tags %}
+         
+          <script>                   
+            
+                $('#unAssignedPlateModal').modal('show');
+            
+        </script>
+        
+
+
+      
+
+         {%elif  "wrong_plate" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#wrongPlateModal').modal('show');
+                 
+            
+        </script>
+
+        {%elif  "plate_taken" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#plateUsedModal').modal('show');
+                 
+            
+        </script>
+
+        {%elif  "plate_not_issued" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#plateNotIssuedModal').modal('show');
+                 
+            
+        </script>
+        {%elif  "plate_not_for_office" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#plateNotForOfficeModal').modal('show');
+                 
+            
+        </script>
+
+        {%elif  "wrong_data" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#wrongDataModal').modal('show');
+                 
+            
+        </script>
+
+
+        {%elif  "uncaught_exception" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#exceptionModal').modal('show');
+                 
+            
+        </script>
+
+        {%elif  "charge_unavailable" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#changeOthersUnavailable').modal('show');
+                 
+            
+        </script>
+
+         {%elif  "assessment_preview" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#revalidateSuccessfull').modal('show');
+                 
+            
+        </script>
+
+
+  
+
+
+ 
+
+
+
+
+wrong_data
+
+        {% endif %}
+
+          
+      {% endfor %}
+
+    {% endif %}
+  </div>
+</body>
+<script>
+  function continueEditingPage () {
+    // body... 
+   
+    window.history.back();
+  }
+</script>
+
+
+</html>

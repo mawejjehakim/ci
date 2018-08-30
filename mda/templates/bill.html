@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Bill</title>
+  {% load static %}
+ {% include 'partials/css_head_links.html' %}
+
+
+  
+    <style>
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" required placeholder="Search for TIN" >
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Add Vehicle</li>
+      </ol> 
+
+ 
+         <div class="row">
+          <div class="col">
+
+            
+              <div class="card" style="">
+              
+              <div class="card-body">
+                <h5 class="card-title">Bill Details</h5>
+              
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <div class="row  "> 
+
+                      <div class="col-sm-5">
+                        TIN
+                      </div>
+                      <div class="col lead text-left text-capitalize">
+                         
+                          {{tin}}
+                        
+                      </div>
+                       
+                    </div>
+
+                   
+                </li>
+
+                <li class="list-group-item">
+                  <div class="row  "> 
+
+                      <div class="col-sm-5">
+                        Ref Number
+                      </div>
+                      <div class="col lead text-left text-capitalize">
+                         
+                          {{tcode}}
+                        
+                      </div>
+                       
+                    </div>
+
+                   
+                </li>
+
+                <li class="list-group-item">
+                  <div class="row  "> 
+
+                    <div class="col-sm-5">
+                     MDA
+                    </div>
+                    <div class="col lead text-left text-capitalize">
+                      {{mda}}
+                    </div>
+                     
+                  </div>
+                </li>
+
+                <li class="list-group-item">
+                   <div class="row  "> 
+
+                    <div class="col-sm-5">
+                      Bill Title
+                    </div>
+                    <div class="col lead text-left text-capitalize">
+                      {{ revenue_item }} {{period}}
+                    </div>
+                     
+                  </div>
+                </li>
+               <li class="list-group-item">
+                <div class="row  "> 
+
+                    <div class="col-sm-5">
+                      Amount
+                    </div>
+                    <div class="col lead text-left text-capitalize ">
+                     {{ amount }} 
+                    </div>
+                     
+                  </div>
+                </li>
+              
+                
+
+ 
+
+
+              
+
+              </ul>
+
+           
+              
+            </div>        
+           
+          </div>
+
+
+          <div class="col-sm-7">
+             
+            <div class="card border-dark" ></div>
+               {% csrf_token %}
+
+              <div class="card-header">Outstanding Bills</div>
+               <div class="card-body">
+
+               
+              
+ 
+            <div class="table-responsive">
+             
+            <table class="table table-bordered"   width="100%" cellspacing="0">
+                      <thead>
+                     {% if mda_ebills %}
+
+
+                        <tr>
+                           <th>Amount</th>
+                          <th>Pay</th>
+                          <th>BR Number</th>
+                           <th>Date</th>
+                          
+                          <th>MDA</th>
+                          <th>Period</th>
+                          
+                          
+ 
+                        </tr>
+                      </thead>
+                      <tfoot>
+                        <tr>
+                           <th>Amount</th>
+                          <th>Pay</th>
+                          <th>BR Number</th>
+                           <th>Date</th>
+                           
+                          <th>MDA</th>
+                          <th>Period</th>
+                         
+                          
+                          
+                        </tr>
+                      </tfoot>
+                      <tbody>
+                        {% for mda_ebills in mda_ebills %}
+                        <tr>
+                          <td>{{ mda_ebills.amount }}</td>
+                           <td> <a href="/mda/select-payment/{{tin}}/{{mda_ebills.reference_number}}/">Pay</a> </td>
+                          <td>{{ mda_ebills.reference_number }}</td>
+                          <td>{{ mda_ebills.transaction_date }}</td>
+                         
+                          <td>{{ mda_ebills.mda.mda_name }}</td>
+                          <td>{{ mda_ebills.period }}</td>
+
+                          
+                        </tr>
+                        {% endfor %}
+                       
+                        
+                          {% else %}
+                              <strong> No Bills generated yet </strong>
+                          {% endif %}
+         
+                       
+                      </tbody>
+                    </table>
+ 
+          </div>
+                 
+ 
+               
+            
+                  
+              </div>
+            </div>
+          </div>       
+                
+             
+        
+       
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © Your CoreIGR 2018</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+
+ 
+ <!-- Modal -->
+    <div id="individualVehicleDataPreviewModal" class="modal fade" role="dialog" data-backdrop="static">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title">Record Preview</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        <form action="/mla/save-individual-vehicle/" method="POST">
+          {% csrf_token %}
+          <div class="modal-body">
+            <div class="card">
+
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <div class="row"> 
+
+                    <div class="col-sm-5">
+                      Chassis Number
+                    </div>
+                    <div class="col-sm">
+                      <input type="text" required name="chassis_number" value="{{ chassis_number }}"  class="no-field-style" >
+                    </div>
+                   
+                </div>
+                </li>
+                <li class="list-group-item">
+                   <div class="row">
+                    <div class="col-sm-5">
+                      Vehicle Model
+                    </div>
+                    <div class="col-sm">
+                      <input type="text" required name="vehicle_model" value="{{ vehicle_model }}"  class="no-field-style" >
+                    </div>
+                     
+                  </div>
+                </li>
+                <li class="list-group-item">
+                   <div class="row">
+                    <div class="col-sm-5">
+                      Plate Number
+                    </div>
+                    <div class="col-sm">
+                      <input type="text" required name="number_plate" value="{{ number_plate }}"  class="no-field-style" >
+                    </div>
+                     
+                  </div>
+                </li>
+                <li class="list-group-item">
+                 <div class="row">
+                  <div class="col-sm-5">
+                    Vehicle Category
+                  </div>
+                  <div class="col-sm">
+                    <input type="text" required name="vehicle_category" value="{{ vehicle_category }}"  class="no-field-style" >
+                  </div>
+                   
+                </div>
+                </li>
+                <li class="list-group-item">
+                 <div class="row">
+                  <div class="col-sm-5">
+                    Gross Weight
+                  </div>
+                  <div class="col-sm">
+                    <input type="text" required name="address" value="{{ gross_weight }}"  class="no-field-style" >
+                  </div>
+                   
+                </div>
+                </li>
+                <li class="list-group-item">
+                 <div class="row">
+                  <div class="col-sm-5">
+                    Net Weight
+                  </div>
+                  <div class="col-sm">
+                    <input type="text" required name="net_weight" value="{{ net_weight }}"  class="no-field-style" >
+                  </div>
+                   
+                </div>
+                </li>
+                <li class="list-group-item">
+                 <div class="row">
+                  <div class="col-sm-5">
+                    Number of Passengers
+                  </div>
+                  <div class="col-sm">
+                    <input type="text" required name="no_of_passengers" value="{{ no_of_passengers }}"  class="no-field-style" >
+                  </div>
+             
+
+                </div>
+                </li>
+                <li class="list-group-item">
+                 <div class="row">
+                  <div class="col-sm-5">
+                    Color
+                  </div>
+                  <div class="col-sm">
+                    <input type="text" required name="colour" value="{{ colour }}"  class="no-field-style" >
+                  </div>
+                   
+                </div>
+                </li>
+                <li class="list-group-item">
+                   <div class="row">
+                    <div class="col-sm-5">
+                      Weight
+                    </div>
+                    <div class="col-sm">
+                      <input type="text" required name="weight" value="{{ weight }}"  class="no-field-style" >
+                    </div>
+                     
+                  </div>
+                </li>
+                <li class="list-group-item">
+                   <div class="row">
+                    <div class="col-sm-5">
+                     Engine Size
+                    </div>
+                    <div class="col-sm">
+                      <input type="text" required name="engine_size" value="{{ engine_size }}"  class="no-field-style" >
+                    </div>
+                     
+                  </div>
+                </li>
+                <li class="list-group-item">
+                   <div class="row ">
+                    <div class="col-sm-5">
+                      Work Place
+                    </div>
+                    <div class="col-sm">
+                      <input type="text" required name="cost_price" value="{{ cost_price }}"  class="no-field-style" >
+                    </div>
+                     
+                  </div>
+                </li>
+               
+              </ul>
+
+                <div class="form-group bg-success">
+                <div class="form-check ">
+                  <input class="form-check-input" type="checkbox" id="add_with_particulars">
+                  <label class="form-check-label" for="add_with_particulars">
+                    Add Vehicle with Particulars
+                  </label>
+                </div>
+              </div>
+
+  
+           
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="continueEditingPage()">Back</button>
+            <input type="submit"  class="btn btn-success" value="Save">
+          </div>
+        </form>
+
+        </div>
+
+      </div>
+    </div>
+
+  <!-- new record created modal -->
+ 
+
+
+    <div class="modal fade" id="recordCreated">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Record created</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Record has been Created </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+    <!-- Logout Modal-->
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include 'partials/js_links.html' %}
+    {% if messages %}
+
+      {% for message  in messages %}
+
+        {% if  "v_data_preview" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#individualVehicleDataPreviewModal').modal('show');
+            
+        </script>
+        
+
+        {%elif  "record_created" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#recordCreated').modal('show');
+                 
+            
+        </script>
+        {% endif %}
+
+          
+      {% endfor %}
+
+    {% endif %}
+  </div>
+</body>
+
+
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Search Results</title>
+ {% include 'partials/css_head_links.html' %}
+
+    <style>
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" placeholder="Search for TIN" required>
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-fw far fa-user"></i>{{req.session.user_name}}</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Search Results       
+             {% if search_results %}    
+                <span class="badge badge-pill badge-info">1</span>
+              {% endif %}
+        </li>
+      </ol>
+      <!-- Example DataTables Card-->
+
+       {% if msg %}
+         <div class="alert alert-warning" role="alert">
+              {{msg}}
+          </div>
+       {% endif %}
+
+       {% if search_results %}
+        
+          {% if for == "company" %}  
+
+            {% for search_result in search_results %}
+
+                
+                <div class="card-header my-2 " >
+                  <h5 class="mb-0">
+                    <i class="fa fa-fw far fa-building"></i> &nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                     {{search_result.bussiness_name }}
+                    </button>
+                    <div class="float-right">
+                       {{search_result.tin.tin}} &nbsp;&nbsp;|&nbsp;&nbsp; {{search_result.bussiness_address}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <a href="/tin/edit-company/{{search_result.id}}/" class=" btn btn-primary">Edit</a>
+
+                       
+                      
+                    </div>
+                  </h5>
+                </div>
+
+          {% endfor %}
+
+        {% elif for == "individual" %}
+            {% for search_result in search_results %}
+
+                 <div class="card-header my-2 " >
+                  <h5 class="mb-0">
+                    <i class="fa fa-fw far fa-user"></i> &nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                     {{search_result.name}} 
+ 
+                    </button>
+                    <div class="float-right">
+                       {{search_result.tin.tin}} &nbsp;&nbsp;|&nbsp;&nbsp; {{search_result.state}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <a href="/tin/edit-individual/{{search_result.id}}/" class=" btn btn-primary">Edit</a>
+
+                       
+                      
+                    </div>
+                  </h5>
+                </div>
+             {% endfor %}
+         {% else %}
+             <h4>No Search Results Found</h4>
+         {% endif %}
+
+      {% endif %}
+
+           
+ 
+
+ 
+
+
+        <!--      <div class="card-header my-2 " >
+              <h5 class="mb-0">
+                <i class="fa fa-fw fa-car"></i> &nbsp;&nbsp;&nbsp;
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  Raum 
+                </button>
+                <div class="float-right">
+                  
+
+                  <a href="" class=" btn btn-danger">Mark Stolen</a>
+                  <a href="" class=" btn btn-primary">Edit</a>
+                  
+                </div>
+              </h5>
+            </div> -->
+
+
+
+          </div>
+       <!--    <div class="card my-sm-1" style="width: 20rem;">
+            <div class="card-body">
+              <h5 class="card-title">Number Plate</h5>
+              <p class="card-text">Biloa Tyres</p>
+              <a href="#" class="card-link">Edit</a>
+              <a href="#" class="card-link">Disable</a>
+            </div>
+          </div> -->
+    
+                   
+        
+
+
+    <!-- Logout Modal-->
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+{% include 'partials/js_links.html' %}
+  </div>
+</body>
+
+
+</html>

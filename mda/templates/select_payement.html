@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Select Payement</title>
+  {% load static %}
+ {% include 'partials/css_head_links.html' %}
+
+
+  
+    <style>
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" placeholder="Search for TIN" required>
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Pay Bill</li>
+      </ol> 
+
+<!--       <div class="card border-0">
+        <div class="card-header">
+          <i class="fa fa-table"></i> Add vehicle</div>
+        <div class="card-body"> -->
+
+          <h3>GENERATE ELECTRONIC BILL</h3>
+          <div class="row">
+            
+          <div class="col">
+
+            <div class="card" style="">
+              <img src="{% static 'images/assets/interswitch.jpg' %}" class="  card-img-top" alt="Individual Image">
+              <div class="card-body">
+                <h5 class="card-title"> Pay Via Interswitch</h5>
+               
+                           
+                            <div class="panel-footer">
+                                <button type="button" data-toggle="modal" class="btn-primary btn" data-target="#payWithInterSwitchModal">Click Here to Pay Via Interswitch</a></div>
+                        </div>
+              </div>
+               
+              
+            </div>        
+                          
+ 
+
+          
+
+
+          <div class="col-sm-6">
+             <div class="card" style="">
+              <img src="{% static 'images/assets/remita.jpg' %}" class="  card-img-top" alt="Individual Image">
+              <div class="card-body">
+                <h5 class="card-title">Pay Via Remitta </h5>
+               
+                            
+                            <div class="panel-footer">
+                            
+                               <button type="button" data-toggle="modal" class="btn-primary btn" data-target="#payWithRemitaModal">Click Here to Pay Via Remita</button>
+                               
+                              </div>
+                        </div>
+              </div>
+          </div>
+        </div>
+          </div>
+          
+       <!--  </div>
+        </div>
+         -->
+       
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © Your CoreIGR 2018</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+
+ 
+ <!-- Modal -->
+    
+  <!-- new record created modal -->
+ 
+
+
+    <div class="modal fade" id="invalidMDABillModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Invalid MDABill</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> This type of bill does not exist  </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="continueEditingPage()">Back</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+   <div class="modal fade" id="invalidDataModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Invalid Data</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Put us correct data  </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="continueEditingPage()">Back</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="paymentAlreadyMadeModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Payemtn Already Made</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> A bill with this bill number is already payed </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="continueEditingPage()">Back</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="paymentMadeModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Payemtn Successful</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Payement has been made and email has been sent to <a href="#">{{email}}</a></p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button onclick="window.print()">Print</button>
+          <a href="/mda/genearate-bill/" class="btn btn-primary" >OK</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+   <div class="modal fade" id="payWithRemitaModal">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Pay with Remita</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form action="/mda/make-payment/" method="POST"> 
+           {% csrf_token %}
+          <div class="form-group">
+
+            {% if tin and bill_no %}
+
+            <input type="hidden" name="tin" value="{{tin}}">
+             <input type="hidden" name="bill_no" value="{{bill_no}}">
+
+            {% else %}
+
+              <div class="form-group row">
+                  <label for="office_name" class="col-sm-2 col-form-label">TIN</label>
+                  <div class="col-sm-10">
+                     <input type="text" class="form-control"  name="tin">
+                  </div>
+              </div>
+
+            
+
+              <div class="form-group row">
+                  <label for="office_name" class="col-sm-2 col-form-label">Bill Number</label>
+                  <div class="col-sm-10">
+                     <input type="text" class="form-control"  name="bill_no">
+                  </div>
+              </div>
+
+              {% endif %}
+
+              <div class="form-group row">
+                  <label for="office_name" class="col-sm-2 col-form-label">Email</label>
+                  <div class="col-sm-10">
+                     <input type="text" class="form-control"  name="email">
+                  </div>
+              </div>
+
+              <div class="form-group row">
+                  <label for="office_name" class="col-sm-2 col-form-label">Phone</label>
+                  <div class="col-sm-10">
+                     <input type="text" class="form-control"  name="phone">
+                  </div>
+              </div>
+
+                          
+          </div>
+              <div class="form-group row"> 
+                <div class="col-sm-2 offset-md-2">
+                    <input type="submit"  class="btn btn-primary" value="Pay">
+                </div>
+            </div>
+           
+        </form>
+        </div>
+        
+        <!-- Modal footer -->
+        
+        
+      </div>
+    </div>
+  </div>
+
+
+   <div class="modal fade" id="payWithInterSwitchModal">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Pay with InterSwitch</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form action="/mda/make-payment/" method="POST"> 
+           {% csrf_token %}
+          <div class="form-group">
+
+            {% if tin and bill_no %}
+
+            <input type="hidden" name="tin" value="{{tin}}">
+             <input type="hidden" name="bill_no" value="{{bill_no}}">
+
+            {% else %}
+
+              <div class="form-group row">
+                  <label for="office_name" class="col-sm-2 col-form-label">TIN</label>
+                  <div class="col-sm-10">
+                     <input type="text" class="form-control"  name="tin">
+                  </div>
+              </div>
+
+            
+
+              <div class="form-group row">
+                  <label for="office_name" class="col-sm-2 col-form-label">Bill Number</label>
+                  <div class="col-sm-10">
+                     <input type="text" class="form-control"  name="bill_no">
+                  </div>
+              </div>
+
+              {% endif %}
+
+              <div class="form-group row">
+                  <label for="office_name" class="col-sm-2 col-form-label">Email</label>
+                  <div class="col-sm-10">
+                     <input type="text" class="form-control"  name="email">
+                  </div>
+              </div>
+
+              <div class="form-group row">
+                  <label for="office_name" class="col-sm-2 col-form-label">Phone</label>
+                  <div class="col-sm-10">
+                     <input type="text" class="form-control"  name="phone">
+                  </div>
+              </div>
+
+                          
+          </div>
+              <div class="form-group row"> 
+                <div class="col-sm-2 offset-md-2">
+                    <input type="submit"  class="btn btn-primary" value="Pay">
+                </div>
+            </div>
+           
+        </form>
+        </div>
+        
+        <!-- Modal footer -->
+        
+        
+      </div>
+    </div>
+  </div>
+
+
+    <!-- Logout Modal-->
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include 'partials/js_links.html' %}
+    {% if messages %}
+
+      {% for message  in messages %}
+
+       
+
+        {%if  "invalid_form_data" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#invalidDataModal').modal('show');
+                 
+            
+        </script>
+
+        {% elif  "invalid_mda_bill" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#invalidMDABillModal').modal('show');
+                 
+            
+        </script>
+
+        {% elif  "payement_already_made" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#paymentAlreadyMadeModal').modal('show');
+                 
+            
+        </script>
+
+        {% elif  "payement_successfull" in message.extra_tags %}
+         
+          <script>                   
+            
+                 $('#paymentMadeModal').modal('show');
+                 
+            
+        </script>
+        {% endif %}
+
+          
+      {% endfor %}
+
+    {% endif %}
+  </div>
+</body>
+
+<script>
+  function continueEditingPage () {
+    // body... 
+   
+    window.history.back();
+  }
+</script>
+
+
+</html>

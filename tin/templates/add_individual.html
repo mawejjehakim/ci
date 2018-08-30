@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Add Individual</title>
+ {% include 'partials/css_head_links.html' %} 
+  <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+ <style>
+   .no-field-style{
+    border: none;
+    background-color: transparent;
+   }
+ 
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+
+ 
+    
+   </style>
+
+   {% load static %}
+
+   <script src="{% static 'js/webcamjs/webcam.min.js' %}"></script> 
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" required placeholder="Search for TIN" required>
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">add Individual</li>
+      </ol>
+      
+    <div class="card">
+      <h5 class="card-header">Add new Individual</h5>
+      <div class="card-body">
+      <form action="/tin/individual-preview/" method="POST">
+               {% csrf_token %}
+              <div class="form-group row">
+                <label for="title" class="col-sm-2 col-form-label">Title</label>
+                <div class="col-sm-10">
+
+                  <select required name="title"  class="form-control">
+                      <option value="">Choose title</option>
+                       <option>Mr. </option>
+                       <option>Mrs. </option>
+                       <option>Ms. </option>
+                     
+
+                    </select>
+                 
+                </div>
+              </div>
+
+              
+
+              <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                   <input type="text" required class="form-control"  name="name"> 
+                </div>
+              </div>
+
+               <fieldset class="form-group">
+                <div class="row">
+                  <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+                  <div class="col-sm-10">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" required name="gender"  value="Male">
+                      <label class="form-check-label" >
+                        Male
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="gender"  value="Female">
+                      <label class="form-check-label">
+                        Female
+                      </label>
+                    </div>
+                    
+                  </div>
+                </div>
+              </fieldset>
+
+               <div class="form-group row">
+                <label for="date_of_birth"   class="col-sm-2 col-form-label">Birth Date</label>
+                <div class="col-sm-10">
+                  <input type="date" required class="form-control" name="date_of_birth">
+                </div>
+              </div>
+
+
+              <div class="form-group row">
+                <label for="marital_status" class="col-sm-2 col-form-label">Marital Status</label>
+                <div class="col-sm-10">
+
+                  <select required name="marital_status"  class="form-control">
+                      <option value="">Choose marital Status</option>
+                      <option>Single</option>
+                      <option>Married</option>
+                      <option>Divorced</option>
+                      <option>Others</option>
+                  </select>
+                 
+                </div>
+              </div>
+
+
+              <div class="form-group row">
+                <label for="state" class="col-sm-2 col-form-label">State of Origin</label>
+                <div class="col-sm-10">
+
+                  <select required name="state"  class="form-control">
+                      <option value="">Choose state</option>
+                     <option>Abia</option>
+                      <option>Adamawa</option>
+                      <option>Akwa Ibom</option>
+                      <option>Anambra</option>
+                      <option>Bauchi</option>
+                      <option>Bayelsa</option>
+                      <option>Benue</option>
+                      <option>Borno</option>
+                      <option>Cross River</option>
+                      <option>Delta</option>
+                      <option>Ebonyi</option>
+                      <option>Enugu</option>
+                      <option>Edo</option>
+                      <option>Ekiti</option>
+                      <option>Gombe</option>
+                      <option>Imo</option>
+                      <option>Jigawa</option>
+                      <option>Kaduna</option>
+                      <option>Kano</option>
+                      <option>Katsina</option>
+                      <option>Kebbi</option>
+                      <option>Kogi</option>
+                      <option>Kwara</option>
+                      <option>Lagos</option>
+                      <option>Nasarawa</option>
+                      <option>Niger</option>
+                      <option>Ogun</option>
+                      <option>Ondo</option>
+                      <option>Osun</option>
+                      <option>Oyo</option>
+                      <option>Plateau</option>
+                      <option>Rivers</option>
+                      <option>Sokoto</option>
+                      <option>Taraba</option>
+                      <option>Yobe</option>
+                      <option>Zamfara</option>
+                      <option>FCT</option>
+
+                    </select>
+                 
+                </div>
+              </div>
+
+
+
+
+               <div class="form-group row">
+                <label for="address" class="col-sm-2 col-form-label">Address</label>
+                <div class="col-sm-10">
+                  <textarea required class="form-control" name="address" rows="2"></textarea>
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label for="lga" class="col-sm-2 col-form-label">LGA of Residence</label>
+                <div class="col-sm-10">
+
+                  <select required name="lga"  class="form-control">
+                       <option value=""> Choose Local government area </option>"
+                        {% if LGAs %}
+                        
+                            {% for LGA in LGAs %}
+
+                                <option value="{{ LGA.local_government_code }}"> {{ LGA.local_government_name }} </option>"
+
+                            {% endfor %}
+
+                         
+                        {% else %}
+                            <strong> No Local government areas yet </strong>
+                        {% endif %}
+                  </select>
+                 
+                </div>
+              </div>
+
+
+
+               <div class="form-group row">
+                <label for="phone" class="col-sm-2 col-form-label">Phone</label>
+                <div class="col-sm-10">
+                  <input type="text" required class="form-control" name="phone">
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                  <input type="email" required class="form-control" name="email">
+                </div>
+              </div>
+
+               <div class="form-group row">
+                <label for="occupation" class="col-sm-2 col-form-label">Occupation</label>
+                <div class="col-sm-10">
+                  <input type="text" required class="form-control"  name="occupation">
+                </div>
+              </div>
+
+
+               <div class="form-group row">
+                <label for="employment_status" class="col-sm-2 col-form-label">Employment Status</label>
+                <div class="col-sm-10">
+
+                  <select required name="employment_status" id="employment_status"  class="form-control">
+                     <option value="">Choose employement</option>
+                       
+                        <option>Employed</option>
+                        <option>Unemployed</option>
+                        <option>Self Employed</option>
+                  </select>
+                 
+                </div>
+              </div>
+
+               <div class="form-group row work_place">
+                <label for="work_place" class="col-sm-2 col-form-label" >Work Place</label>
+                <div class="col-sm-10">
+
+                  <select  name="work_place"  class="form-control">
+                     <option value=""> Choose work place</option>
+               
+
+                     {% if work_places %}
+
+                        {% for work_place in work_places %}
+
+                            <option value="{{ work_place.id }}"> {{ work_place.bussiness_name }} </option>
+
+                        {% endfor %}
+
+                 
+                    {% else %}
+                        <strong> no workplaces yet </strong>
+                    {% endif %}
+                     
+
+                   
+                  </select>
+                 
+                </div>
+              </div>
+
+
+               
+            
+                 <div class="form-group row"> 
+                    <div class="col-sm-2 offset-md-2">
+                        <input type="submit"  class="btn btn-primary" value="Next">
+                    </div>
+                </div>
+            </form>
+             </div>
+      </div>
+
+
+     
+
+<!-- Modal -->
+    <div id="individualDataPreviewModal" class="modal fade" role="dialog" data-backdrop="static">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title">Record Preview</h5>
+            
+          </div>
+        <form action="/tin/save-individual/" method="POST">
+          {% csrf_token %}
+          <div class="modal-body">
+            <div class="card">
+
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <div class="row"> 
+
+
+                    <div class="col-sm">
+                      Name
+                    </div>
+                    <div class="col-sm">
+                      <input type="text" required name="name" value="{{ name }}"  class="lead text-uppercase no-field-style" >
+                    </div>
+                   
+                </div>
+                </li>
+                <li class="list-group-item">
+                   <div class="row">
+                    <div class="col-sm">
+                      Gender
+                    </div>
+                    <div class="col-sm">
+                      <input type="text" required name="gender" value="{{ gender }}"  class="lead text-uppercase no-field-style" >
+                    </div>
+                     
+                  </div>
+                </li>
+                <li class="list-group-item">
+                   <div class="row">
+                    <div class="col-sm">
+                      Date of birth
+                    </div>
+                    <div class="col-sm">
+                      <input type="text" required name="date_of_birth" value="{{ date_of_birth }}"  class="lead text-uppercase no-field-style" >
+                    </div>
+                     
+                  </div>
+                </li>
+                <li class="list-group-item">
+                 <div class="row">
+                  <div class="col-sm">
+                    Marital Status
+                  </div>
+                  <div class="col-sm">
+                    <input type="text" required name="marital_status" value="{{ marital_status }}"  class="lead text-uppercase no-field-style" >
+                  </div>
+                   
+                </div>
+                </li>
+                <li class="list-group-item">
+                 <div class="row">
+                  <div class="col-sm">
+                    Address
+                  </div>
+                  <div class="col-sm">
+                    <input type="text" required name="address" value="{{ address }}"  class="lead text-uppercase no-field-style" >
+                  </div>
+                   
+                </div>
+                </li>
+                <li class="list-group-item">
+                 <div class="row">
+                  <div class="col-sm">
+                    State
+                  </div>
+                  <div class="col-sm">
+                    <input type="text" required name="state" value="{{ state }}"  class="lead text-uppercase no-field-style" >
+                  </div>
+                   
+                </div>
+                </li>
+                <li class="list-group-item">
+                 <div class="row">
+                  <div class="col-sm">
+                    Phone
+                  </div>
+                  <div class="col-sm">
+                    <input type="text" required name="phone" value="{{ phone }}"  class="lead text-uppercase no-field-style" >
+                  </div>
+                   
+                </div>
+                </li>
+                <li class="list-group-item">
+                 <div class="row">
+                  <div class="col-sm">
+                    Email
+                  </div>
+                  <div class="col-sm">
+                    <input type="text" required name="email" value="{{ email }}"  class="lead text-uppercase no-field-style" >
+                  </div>
+                   
+                </div>
+                </li>
+                <li class="list-group-item">
+                   <div class="row">
+                    <div class="col-sm">
+                      Occupation
+                    </div>
+                    <div class="col-sm">
+                      <input type="text" required name="occupation" value="{{ occupation }}"  class="lead text-uppercase no-field-style" >
+                    </div>
+                     
+                  </div>
+                </li>
+                <li class="list-group-item">
+                   <div class="row">
+                    <div class="col-sm">
+                      Employement Status
+                    </div>
+                    <div class="col-sm">
+                      <input type="text" required name="employment_status" id="employment_status" value="{{ employment_status }}"  class="lead text-uppercase no-field-style" >
+                    </div>
+                     
+                  </div>
+                </li>
+                <li class="list-group-item">
+                   <div class="row ">
+                    <div class="col-sm">
+                      Work Place
+                    </div>
+                    <div class="col-sm">
+                      <input type="text" required name="work_place" value="{{ work_place }}"  class="lead text-uppercase no-field-style" >
+                    </div>
+                     
+                  </div>
+                </li>
+               
+              </ul>
+
+  
+
+              <input type="hidden" name="tin" value="{{ tin }}"  class="no-field-style" >
+
+
+
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="continueEditingPage()">Back</button>
+            <input type="submit"  class="btn btn-success" value="Save">
+          </div>
+        </form>
+
+        </div>
+
+      </div>
+    </div>
+
+<!-- new record created modal -->
+ 
+
+
+
+    <div class="modal fade" id="recordCreated" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Record created</h5>
+           
+        </div>
+        
+        <!-- Modal body -->
+
+          <div class="modal-body">
+          
+
+       
+           <div class="container">
+
+            <h6>Add Individual Picture </h6>
+            
+            
+            <div class="row">
+
+
+              <div class="col-sm">
+                 <div class="card" id="my_camera"> 
+                  <div class="card-img-overlay">
+                   
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm">
+                <div id="results" ></div>
+              </div>
+            </div>
+          </div> 
+
+        </div>
+ 
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type=button class="btn btn-info"   > Reset </button>
+          
+
+          <button type=button class="btn btn-secondary" id="takePic" onClick="take_snapshot()"> Take Picture </button>
+
+          <button type=button class="btn btn-success" id="savePic" onClick="saveSnap()"> Save Picture </button>
+
+
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="emailPhoneExistModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Duplicate Data</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Either email or password is assigned to a certain user </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+           <button type="button" class="btn btn-primary" onclick="continueEditingPage()">Back</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+    <div class="modal fade" id="successModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Record created Successfully</h5>
+           
+        </div>
+        
+        <!-- Modal body -->
+
+          <div class="modal-body">
+            <p>Indivudual Picture successfully</p>
+          </div>
+ 
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+
+          <a href="/tin/add-individual/" class="btn btn-success" > Ok </a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <!-- modal existing record -->
+
+    <div class="modal fade" id="recordAlreadyExistModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Record Already created</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> This Record has already been Created </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="wrongDataModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Wrong Input Data</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p> Please type correct Data</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+
+<div class="modal fade" id="stateCodeUnsetModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">State Code not set Input Data</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p> Please Set State code</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+
+
+    
+  <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © CoreIGR 2018</small>
+        </div>
+      </div>
+    </footer>
+ 
+    <!-- Logout Modal-->
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% include 'partials/js_links.html' %}
+
+
+        {% if messages %}
+
+          {% for message  in messages %}
+
+            {% if  "record_preview" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#individualDataPreviewModal').modal('show');
+                
+            </script>
+         
+
+            {%elif  "record_created" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#recordCreated').modal('show');
+
+
+                       // Configure a few settings and attach camera
+                       Webcam.set({
+                        width: 320,
+                        height: 240,
+                        image_format: 'jpeg',
+                        jpeg_quality: 90
+                       });
+                       Webcam.attach( '#my_camera' );
+
+                       // preload shutter audio clip
+                       var shutter = new Audio();
+                       shutter.autoplay = true;
+                       shutter.src = navigator.userAgent.match(/Firefox/) ? 'shutter.ogg' : 'shutter.mp3';
+
+                       var shutter = new Audio();
+                       shutter.autoplay = false;
+                       shutter.src = navigator.userAgent.match(/Firefox/) ? 'shutter.ogg' : 'shutter.mp3';
+
+                       function take_snapshot() {
+                        // play sound effect
+                        shutter.play();
+
+                        // take snapshot and get image data
+                        Webcam.snap( function(data_uri) {
+                        // display results in page
+                        document.getElementById('results').innerHTML = 
+                         '<img id="imageprev" src="'+data_uri+'"/>';
+                        } );
+
+                        
+                        // Webcam.reset();
+                       }
+
+                      function saveSnap(){
+                       // Get base64 value from <img id='imageprev'> source
+                       var base64image = document.getElementById("imageprev").src;
+                        Webcam.reset();
+                      
+                       
+                        $.ajax({
+                          type: 'POST',
+                          url: '/tin/save_pic/',
+                          data:{base64image:base64image},
+                          
+                          success: function(data) {
+
+                            if (data.res == "success") {
+                               $('#successModal').modal('show');
+                            }
+                            else {
+                              alert("image not saved")
+                            }
+                            
+                             
+
+                          },
+                          failure: function(data) { 
+                              alert('image not saved Try agian');
+                          }
+
+                          })
+                      }
+
+                      
+
+                          
+                     
+                
+            </script>
+
+            {%elif  "record_already_created" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#recordAlreadyExistModal').modal('show');
+                     
+                
+            </script>
+
+             {% elif  "wrong_data" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongDataModal').modal('show');
+                
+            </script>
+
+            
+            
+
+
+            {% endif %}
+
+              
+          {% endfor %}
+
+        {% endif %}
+  </div>
+</body>
+<script>
+  function continueEditingPage () {
+    // body... 
+   
+    window.history.back();
+  }
+
+
+  $('#employment_status').on('change', function() {
+   
+
+    if ( $(this).val()  == "Unemployed" ) {
+      
+      
+      $('.work_place').hide()
+    }
+    else {
+       $('.work_place').show()
+      
+    }
+  });
+
+
+</script>
+
+
+</html>

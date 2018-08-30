@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <title>CoreIGR | Vehicle Assessement</title>
+  {% load static %}
+ {% include 'partials/css_head_links.html' %}
+
+
+    <style>
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2">
+            <div class="input-group">
+              <input class="form-control" type="text" placeholder="Search for...">
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="button">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Add Vehicle</li>
+      </ol> 
+
+<!--       <div class="card border-0">
+        <div class="card-header">
+          <i class="fa fa-table"></i> Add vehicle</div>
+        <div class="card-body"> -->
+
+          
+          <div class="row ">
+          <div class="col col-sm-7">
+
+            <div class="card"> 
+                <div class="card-header">
+                 Vehicle Details
+                </div>
+              <div class="card-body"> 
+              
+              
+                <div class="row border-bottom py-2">
+                  <div class="col">Owner's TIN</div>
+                  <div class="col text-uppercase lead"> {{  vehicle_obj.current_owner_tin.tin}}</div>
+                 
+                </div>
+
+                <div class="row border-bottom py-2">
+                   <div class="col">G. Weight</div>
+                  <div class="col text-uppercase lead"> {{  vehicle_obj.gross_weight}} </div>
+                </div>
+
+ 
+                  <div class="row border-bottom py-2">
+                  <div class="col">Vehicle Modal</div>
+                  <div class="col text-uppercase lead"> {{  vehicle_obj.vehicle_model}} </div>
+                 
+                </div>
+
+                <div class="row border-bottom py-2">
+                   <div class="col">Number Of P</div>
+                  <div class="col text-uppercase lead"> {{  vehicle_obj.no_of_passengers}} </div>
+                </div>
+
+
+                <div class="row border-bottom py-2">
+                  <div class="col">Plate Number</div>
+                  <div class="col text-uppercase lead"> {{  vehicle_obj.number_plate.number_plate}} </div>
+                 
+                </div>
+                <div class="row border-bottom py-2">
+                   <div class="col  ">weight</div>
+                  <div class="col text-uppercase lead"> {{  vehicle_obj.weight}} </div>
+                </div>
+
+
+                <div class="row border-bottom py-2">
+                  <div class="col">Engine Size</div>
+                  <div class="col text-uppercase lead"> {{  vehicle_obj.engine_size}} </div>
+                 
+                </div>
+                <div class="row border-bottom py-2">
+                   <div class="col">Color</div>
+                  <div class="col text-uppercase lead"> {{  vehicle_obj.colour}} </div>
+                </div>
+
+                <div class="row py-2 ">
+                  <div class="col">Vehicle Category</div>
+                  <div class="col text-uppercase lead"> {{  vehicle_obj.vehicle_category}} </div>
+                   
+                </div>
+
+              </div></div>
+            
+              
+           
+    
+ 
+          </div>
+
+
+          <div class="col-sm-5">
+
+             <div  class="card border-dark" >
+            <form action="/mla/save-vehicle-assessment/" method="POST">
+               {% csrf_token %}
+              
+                <input type="hidden" name="chassis_number" value="{{vehicle_obj.chassis_number}}">
+                <input type="hidden" name="number_plate" value="{{vehicle_obj.number_plate.number_plate}}">
+                <input type="hidden" name="current_owner_tin" value="{{vehicle_obj.current_owner_tin.tin}}"> 
+
+               
+              <div class="card-header">Vehicle Assessment</div>
+               <div class="card-body">
+                 
+               
+              
+                <!-- private vehicle saloon -->
+              
+              <div class="form-group row">
+
+                <label for="assessment_type" class="col-sm-4 col-form-label">Assessment Type</label>
+                <div class="col">
+
+                  <select required name="assessment_type"  class="form-control">
+                      <option value="">Select engine size</option>
+
+
+                  {% if vehicle_obj.vehicle_category == "Private Vehicle Saloon" and  vehicle_obj.engine_size == "1.6 - 2.0" %}
+
+                            <option>Vehicle License [1.6 - 2.0]</option>                     
+                            <option>Certificate of road worthiness</option>                           
+                            <option>Registration Book</option>
+                            <option>SMS Alert</option>
+                            <option>Stamp Duty</option> 
+                    
+                  {% elif vehicle_obj.vehicle_category == "Private Vehicle Saloon" and  vehicle_obj.engine_size == "2.1 - 3.0" %}
+                            
+                            <option>Vehicle License [2.1 - 3.0]</option>
+         
+                    <option>Certificate of road worthiness</option>
+              
+                    <option>Registration Book</option>
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                     
+
+                  {% elif vehicle_obj.vehicle_category == "Private Vehicle Saloon" and  vehicle_obj.engine_size == "3.1 - Above" %}
+                            
+                            <option>Vehicle License [3.1 - Above]</option>
+                    <option>Certificate of road worthiness</option>
+               
+                    <option>Registration Book</option>
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                     
+                  <!-- ============================COMMERCIAL VEHICLE SALOON ======================    -->
+                  {% elif vehicle_obj.vehicle_category == "Commercial Vehicle Saloon" and  vehicle_obj.engine_size == "1.6 - 2.0" %}
+                          <option>Vehicle License [1.6 - 2.0]</option> 
+                    <option>Certificate of road worthiness</option>
+            
+                    <option>Registration Book</option>
+       
+                    <option>Driver Badge</option>
+                    <option>Hackney permit</option>
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                    
+                    
+                  {% elif vehicle_obj.vehicle_category == "Commercial Vehicle Saloon" and  vehicle_obj.engine_size == "2.1 - 3.0" %}
+                       
+                       <option>Vehicle License [2.1 - 3.0]</option>
+        
+                    <option>Certificate of road worthiness</option>
+               
+                    <option>Registration Book</option>
+         
+                    <option>Driver Badge</option>
+                    <option>Hackney permit</option>
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                    
+                    
+                  {% elif vehicle_obj.vehicle_category == "Commercial Vehicle Saloon"  and  vehicle_obj.engine_size == "3.1 - Above" %}
+                     
+                     <option>Vehicle License [3.1 - Above]</option>
+                    <option>Certificate of road worthiness</option>
+              
+                    <option>Registration Book</option> 
+                    <option>Driver Badge</option>
+                    <option>Hackney permit</option>
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                    
+                    
+                 <!-- ============================PRIVATE PICKUP/BUS ======================     -->
+                  {% elif vehicle_obj.vehicle_category == "Private Pickup/Bus" and  vehicle_obj.engine_size == "1.6 - 2.0" %}
+                          
+                         <option>Vehicle License [1.6 - 2.0]</option>
+        
+                    <option>Certificate of road worthiness</option>
+              
+                    <option>Registration Book</option> 
+                    <option>Driver Badge</option>
+                    <option>Hackney permit</option>
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                    
+                    
+                  {% elif vehicle_obj.vehicle_category == "Private Pickup/Bus" and  vehicle_obj.engine_size == "2.1 - 3.0" %}
+                      
+                         <option>Vehicle License [2.1 - 3.0]</option>
+                    <option>Certificate of road worthiness</option>
+                    <option>Registration Book</option>
+                    <option>Driver Badge</option>
+                    <option>Hackney permit</option>
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                    
+                    
+                  {% elif vehicle_obj.vehicle_category == "Private Pickup/Bus"  and  vehicle_obj.engine_size == "3.1 - Above" %}
+                     
+                         <option>Vehicle License [3.1 - Above]</option>
+                    <option>Certificate of road worthiness</option>
+              
+                    <option>Registration Book</option> 
+                    <option>Driver Badge</option>
+                    <option>Hackney permit</option>
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                        
+                        
+                 <!-- ============================COMMERCIAL PICKUP/BUS ======================    -->
+                  {% elif vehicle_obj.vehicle_category == "Commercial Pickup/Bus" and  vehicle_obj.engine_size == "1.6 - 2.0" %}
+                          
+                                            <option>Certificate of road worthiness</option>
+                    <option>Registration Book</option>
+                    <option>Conductors Badge</option>
+                    <option>Driver Badge</option>
+                    <option>Hackney permit</option>
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                    
+                    
+                  {% elif vehicle_obj.vehicle_category == "Commercial Pickup/Bus" and  vehicle_obj.engine_size == "2.1 - 3.0" %}
+                      
+                        <option>Vehicle License [2.1 - 3.0]</option>
+                    <option>Certificate of road worthiness</option>
+                    <option>Registration Book</option>
+                    <option>Conductors Badge</option>
+                    <option>Driver Badge</option>
+                    <option>Hackney permit</option>
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                    
+                    
+                  {% elif vehicle_obj.vehicle_category == "Commercial Pickup/Bus"  and  vehicle_obj.engine_size == "3.1 - Above" %}
+                     
+                        <option>Vehicle License [3.1 - above]</option>
+                    <option>Certificate of road worthiness</option>
+                    <option>Registration Book</option>
+                    <option>Conductors Badge</option>
+                    <option>Driver Badge</option>
+                    <option>Hackney permit</option>
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                  
+                    
+                   <!-- ======================COMMERCIAL TRUCK/TRAILER ================================   -->
+                    
+                  {% elif vehicle_obj.vehicle_category == "Commercial Truck/Trailer/Lorry/Tipper"  and  vehicle_obj.engine_size == "6 - 8 tyres" %}
+                          
+                          <option>Vehicle License [6 - 8 tyres]</option>
+                    <option>Certificate of road worthiness</option>
+                    <option>Registration Book</option>
+                    <option>Conductors Badge</option>
+                    <option>Driver Badge</option>
+                    <option>Hackney permit [6 - 8 tyres]</option>
+                    <option>Hackney permit [10 tyres - above]</option>
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                    
+                    
+                  {% elif vehicle_obj.vehicle_category == "Commercial Truck/Trailer/Lorry/Tipper" and  vehicle_obj.engine_size == "10 tyres - above" %}
+                      
+                        <option>Vehicle License [10 tyres - above]</option>
+                    <option>Certificate of road worthiness</option> 
+                    <option>Registration Book</option>
+                    <option>Conductors Badge</option>
+                    <option>Driver Badge</option>
+                    <option>Hackney permit [6 - 8 tyres]</option>
+                    <option>Hackney permit [10 tyres - above]</option>
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                    
+                    
+                 <!-- =========================COMMERCIAL TRICYCLE/MOTORCYCLE =====================     -->
+                  {% elif vehicle_obj.vehicle_category == "Commercial Tricycle/Motorcycle" and  vehicle_obj.engine_size == "Motocycle" %}
+                      
+                                              <option>Vehicle License Motorcycle</option>
+                    <option>Certificate of road worthiness</option> 
+                    <option>Drivers Badge</option> 
+                    <option>Hackney permit</option> 
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                  
+                    
+                  {% elif vehicle_obj.vehicle_category == "Commercial Tricycle/Motorcycle" and  vehicle_obj.engine_size == "Tricycle" %}
+                          
+                         <option>Vehicle License Tricycle</option> 
+                    <option>Certificate of road worthiness</option>
+              
+                    <option>Drivers Badge</option>
+                    <option>Hackney permit</option>
+             
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                    
+                    
+                    <!-- =========================PRIVATE  TRICYCLE/MOTORCYCLE =====================     -->
+                  {% elif vehicle_obj.vehicle_category == "Private Motorcycle" and  vehicle_obj.engine_size == "Motocycle" %}
+                          
+                          <option>Vehicle License Motorcycle</option>
+                    <option>Certificate of road worthiness</option>
+                    <option>Drivers Badge</option>
+                    <option>Hackney permit</option>
+            
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+                    
+                     <!-- =========================DEALERS VEHICLE =====================    -->
+                   {% elif vehicle_obj.vehicle_category == "Dealers Vehicle" or  vehicle_obj.vehicle_category == "Dealers Tricycle/Motorcycle" %}
+                     
+                                              <option>Registration Fee</option>
+                    <option>SMS Alert</option>
+                    <option>Stamp Duty</option>
+
+                  {% endif %}
+                      </select>
+                               
+                      </div>
+                    </div>               
+            
+                 <div class="form-group row"> 
+                    <div class="col offset-md-4">
+                        <input type="submit"  class="btn btn-primary" value="submit">
+                    </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+       <div class="modal fade " data-backdrop="static" tabindex="-1" id="assessmentPreviewModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        
+ 
+
+        <div class="modal-content px-3">
+           <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Transaction Review</h5>
+            <a href="/mla/get-for-vehicle-assessment/">  
+              <span aria-hidden="true">&times;</span>
+            </a>
+          </div>
+         
+
+     
+             
+
+
+               <div class="card mb-3">
+        <div class="card-header">
+          <i class="fa fa-table"></i> Tranasction Assessment
+        </div>
+        <div class="card-body">
+          <div class="card border-bottom p-3 my-3" >
+
+          <div class="row">
+            <div class="col-sm">
+             Assessment Type
+            </div>
+            <div class="col-sm lead text-uppercase">
+              
+               Renewal of Particulars
+              
+            </div>
+             
+          </div>
+           <div class="row">
+            <div class="col-sm">
+             Owner TIN 
+            </div>
+            <div class="col-sm lead text-uppercase">
+              
+              {{tin}}
+              
+            </div>
+             
+          </div>
+
+           <div class="row">
+            <div class="col-sm">
+             Chassis number
+            </div>
+            <div class="col-sm lead text-uppercase">
+              
+              {{chassis_number}}
+              
+            </div>
+             
+          </div>
+           <div class="row">
+            <div class="col-sm">
+             Number Plate
+            </div>
+            <div class="col-sm lead text-uppercase">
+              
+               {{number_plate}}
+              
+            </div>
+             
+          </div>
+
+            
+         
+              </div>
+
+          <div class="table-responsive">
+             
+             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+             {% if transaction_assessments %}
+
+                <tr>
+                <tr>
+                   <th>Transaction Code</th> 
+                  <th>Particular</th> 
+                  <th>Amount</th> 
+
+                </tr>
+                 
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                <tr>
+                  <th>Transaction Code</th> 
+                  <th>Particular</th> 
+                  <th>Amount</th> 
+
+                </tr>
+                  
+                </tr>
+              </tfoot> 
+
+              <tbody>
+                {% for transaction_assessment in transaction_assessments %}
+                <tr> 
+                  <td>{{ transaction_assessment.transaction_code }}</td>
+                  <td>{{ transaction_assessment.particulars }}</td>
+                  <td>{{ transaction_assessment.amount }}</td>
+                   
+                  
+                </tr>
+              {% endfor %}
+              </tbody>
+              {% else %}
+                 <div class="alert alert-warning float-left"  role="alert">
+                     No Assesments generated Yet
+                </div>
+              {% endif %}
+              
+            </table>
+
+ 
+          </div>
+        </div>
+        
+      </div>
+            <div class="modal-footer">
+                
+                <a href="/mla/get-for-vehicle-assessment/" class="btn btn-primary"  >Okay</a>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+ 
+
+
+
+
+
+
+       
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © Your CoreIGR 2018</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+
+ 
+ <!-- Modal -->
+    
+  <!-- new record created modal -->
+ 
+<div class="modal fade" id="chargeUnavailabeModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header bg-warning">
+          <h5 class="modal-title">Charge Un Available!!</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p>You cant assess this vehicle becouse its charge is unvailabe </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <a href="/mla/get-for-vehicle-assessment/" class="btn btn-primary"  >Ok</a> 
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+<div class="modal fade" id="exceptionModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header bg-danger">
+          <h5 class="modal-title">Error!!</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p>Something wrong happened try agin </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <a href="/mla/get-for-vehicle-assessment/" class="btn btn-primary"  >Ok</a> 
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="assessmentStillValidModal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header bg-info">
+          <h5 class="modal-title">Assement still valid</h5> 
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p>This type of assessmetn is still valid on this car </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <a href="/mla/get-for-vehicle-assessment/" class="btn btn-primary"  >Ok</a> 
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  </div>
+
+    <!-- Logout Modal-->
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div></div>
+    {% include 'partials/js_links.html' %}
+
+        {% if messages %}
+
+          {% for message  in messages %}
+
+            {% if  "charge_unavailable" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#chargeUnavailabeModal').modal('show');
+                
+            </script>
+         
+
+            {% elif  "record_created" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#assessmentPreviewModal').modal('show');
+                     
+                
+            </script>
+
+            {% elif  "assessement_still_valid" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#assessmentStillValidModal').modal('show');
+                     
+                
+            </script>
+
+            {% elif  "uncaught_exception" in message.extra_tags %}
+             
+              <script>       
+
+                
+                     $('#exceptionModal').modal('show');
+                     
+                
+            </script>
+ 
+
+            {% endif %}
+
+            
+
+              
+          {% endfor %}
+
+        {% endif %}
+        </body>
+   
+
+<script>
+  function continueEditingPage () {
+    // body... 
+   
+    window.history.back();
+  }
+</script>
+
+
+</html>
+ 
+
+ 

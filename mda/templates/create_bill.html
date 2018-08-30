@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Create Bill</title>
+ {% include 'partials/css_head_links.html' %}
+
+    <style>
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" placeholder="Search for TIN" required>
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Add Charge</li>
+      </ol>
+      <!-- Example DataTables Card-->
+
+      <div class="card">
+      <h5 class="card-header">Add Charge</h5>
+      <div class="card-body">
+
+
+       <form action="/set-up/add-charge/" method="POST"> 
+                {% csrf_token %}
+                <div class="form-group">
+
+
+                   <div class="form-group row">
+                      <label for="options" class="col-sm-2 col-form-label">Ministry/Depart/Agency</label>
+                       <p>Please Note: this new update has merge all revenue to their MDA so you must first select MDA then choose a revenue under that MDA. TAX items are under PSIRS as an MDA. If you need clarification or in-doubt contact the Revenue Service on any of this numbers 08069410021, 07035168203, 08036134396 &amp; 09035085741 for clarification.</p>
+                                            <p>
+                      <div class="col-sm-10">
+
+                       
+                       <select class="form-control form-control-sm" name="options">
+                        <option>Choose..</option>
+
+                         {{mda}}
+
+                        
+                      </select>
+                       
+                      </div>
+                    </div>
+
+
+                   <div class="form-group row">
+                      <label for="vehicle_type" class="col-sm-2 col-form-label"> Select Revenue Item </label>
+                      <div class="col-sm-10">
+
+                       
+                       <select class="form-control form-control-sm" name="vehicle_type">
+                          <option>Choose Vehicle type</option>
+
+                          {{ revenue }}
+                        
+                      </select>
+                       
+                      </div>
+                    </div>
+
+
+                     <div class="form-group row">
+                      <label for="particulars" class="col-sm-2 col-form-label">Period/Description</label>
+                      <div class="col-sm-10">
+                      <input type="text " name="" readonly value="6543">
+                       
+                        
+                       
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="particulars" class="col-sm-2 col-form-label">Name</label>
+                      <div class="col-sm-10">
+                        <input type="text " name="" readonly value="6543">
+                       
+                        
+                       
+                      </div>
+                    </div>
+
+                     <div class="form-group row">
+                      <label for="particulars" class="col-sm-2 col-form-label">TIN</label>
+                      <div class="col-sm-10">
+                        <input type="text " name="" readonly value="6543">
+                       
+                        
+                       
+                      </div>
+                    </div>
+
+
+                     <div class="form-group row">
+                      <label for="amount" class="col-sm-2 col-form-label">Amount</label>
+                      <div class="col-sm-10">
+                         <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">N</span>
+                          </div>
+                          <input type="text" class="form-control" name="amount" aria-label="Amount (to the nearest dollar)">
+                          <div class="input-group-append">
+                            <span class="input-group-text">.00</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                     <div class="form-group row"> 
+                        <div class="col-sm-2 offset-md-2">
+                            <input type="submit"  class="btn btn-primary" value="Save Charge">
+                        </div>
+                    </div>
+
+                  </div>
+                </form>
+              </div>
+
+
+
+    <!-- Logout Modal-->
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+{% include 'partials/js_links.html' %}
+  </div>
+</body>
+
+
+</html>

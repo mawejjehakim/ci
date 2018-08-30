@@ -1,0 +1,65 @@
+
+{% load static %}
+<li class="nav-item border-bottom text-center" data-toggle="tooltip" data-placement="right" title="Dashboard">
+  <a class="nav-link" href="/login/">
+  <img class="img-fluid" src="{% static 'images/assets/logo.png' %}" alt="Chania"> 
+  </a>
+</li>
+
+
+
+<li class="nav-item border-bottom" data-toggle="tooltip" data-placement="right" title="Dashboard">
+  <a class="nav-link" href="">
+    <i class="fa fa-fw fa-dashboard"></i>
+    <span class="nav-link-text">DASHBOARD</span>
+  </a>
+</li>
+<!-- tin navigation -->
+ 
+
+
+
+
+<li class="nav-item border-bottom  " data-toggle="tooltip" data-placement="right" title="Components">
+  <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#mla" >
+    <i class="fa fa-fw fa-wrench"></i>
+    <span class="nav-link-text">MLA</span>
+  </a>
+  <ul class="sidenav-second-level collapse" id="mla">
+        <li>
+            <a href='/mla/vehicles'>Vehicles</a>
+        </li>
+
+       <li>
+            <a href='/mla/get-tin-info/'>New Vehicle Registration</a>
+        </li>
+      	 
+       <!--  <li>
+            <a href='mla/edit-vehicle'>Edit Vehicle Registration</a>
+        </li> -->
+        <li>
+            <a href='mla/change-vehicle-ownership/'>Change of Ownership</a>
+        </li>
+        <li>
+            <a href='/mla/mark-stolen-vehicle'>Mark Stolen vehicle</a>
+        </li>
+        <li>
+            <a href='/mla/get-learners-permit/'>Learners Permit</a>
+        </li>
+        <li>
+            <a href='/mla/learners/'>Learners</a>
+        </li>
+        <li>
+            <a href='mla/get-for-vehicle-assessment/'>Renewal</a>
+        </li>
+        <li>
+            <a href='/mla/get-vehicle-revalidation/'>Revalidation</a>
+        </li>
+      <!--   <li>
+            <a href='mla/recpts'>Print Particulars/Reciepts</a>
+        </li>
+ -->
+
+  </ul>
+</li>
+  

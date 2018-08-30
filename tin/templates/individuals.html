@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Individuals</title>
+ {% include 'partials/css_head_links.html' %}
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <style>
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse " id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav " id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" placeholder="Search for TIN" required>
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Individuals</li>
+      </ol>
+      <!-- Example DataTables Card-->
+      <div class="card mb-3">
+        <div class="card-header ">
+          <i class="fa fa-table"></i> Individuals</div>
+        <div class="card-body">
+
+          <div class="table-responsive">
+             <a  href="/tin/add-individual/"   class="btn btn-info" style="float: right;margin-left: 20%;margin-right: 20px;">Add Individual</a>
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+             {% if individuals %}
+
+
+                <tr> 
+                  <th>Tin</th>
+                  <th>Name</th>
+                  
+                  <th>Address</th>
+                  <th>State</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>gender</th>
+                  <th>BirthDay</th>
+                  <th>Marital S</th>
+                  <th>Occupation</th>
+                  <th>E Status</th>
+                  <th>Work Place</th>
+                  <th>Options</th>
+
+                 
+                </tr>
+              </thead>
+              <tfoot>
+                <tr> 
+
+                  <th>Tin</th>
+                  <th>Name</th>
+                  
+                  <th>Address</th>
+                  <th>State</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>gender</th>
+                  <th>BirthDay</th>
+                  <th>Marital S</th>
+                  <th>Occupation</th>
+                  <th>E Status</th>
+                  <th>Work Place</th>
+                  <th>Options</th>
+                  
+                </tr>
+              </tfoot>
+              <tbody>
+                {% for individual in individuals %}
+                <tr> 
+                  <td>{{ individual.tin.tin }}</td>
+                  <td>{{ individual.name }}</td>
+
+                  <td>{{ individual.address }} </td>
+                  <td>{{ individual.state }} </td>
+                  <td>{{ individual.phone }}</td>
+                  <td>{{ individual.email }}</td>
+                  <th>{{ individual.gender }}</td>
+                  <td>{{ individual.date_of_birth }}</td>
+                  <td>{{ individual.marital_status }}</td>
+                  <td>{{ individual.occupation }}</td>
+                  <td>{{ individual.employement_status }}</td>
+                  <td>{{ individual.work_place }}</td>
+                  <td><a href="/tin/edit-individual/{{individual.id}}/" class=" btn btn-outline-info btn-sm">Edit</a></td>
+                  
+                </tr>
+                {% endfor %}
+              </tbody>
+              {% else %}
+                 <div class="alert alert-warning float-left"  role="alert">
+                     No Individual Records yet
+                </div>
+              {% endif %}
+              
+            </table>
+          </div>
+        </div>
+        <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
+      </div>
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © Your CoreIGR 2018</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+
+ 
+    <!-- Logout Modal-->
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+{% include 'partials/js_links.html' %}
+  </div>
+</body>
+
+
+</html>

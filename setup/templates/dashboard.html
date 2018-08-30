@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <title>CoreIGR | dashboard</title>
+   <meta charset="UTF-8">
+
+   {% include 'partials/css_head_links.html' %}
+   {% load static %}
+    <style>
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav" >
+    <a class="navbar-brand" href="/">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse " id="navbarResponsive" >
+      <ul class="navbar-nav navbar-sidenav" style="overflow-y: scroll" >
+       
+ 
+         {% if request.session.access_level %}
+
+                            {% if request.session.access_level == 'Super Administrator' %}
+                                {% include "partials/menus/super_admin.html" %}
+                            {% endif %}
+
+                            {% if request.session.access_level == 'TIN User' %}
+                                {% include "partials/menus/tin_user.html" %}
+                            {% endif %}
+
+                            {% if request.session.access_level == 'MLA User' %}
+                                {% include "partials/menus/mla_user.html" %}
+                            {% endif %}
+
+                            {% if request.session.access_level == 'MLA Administrator' %}
+                                {% include "partials/menus/mla_admin.html" %}
+                            {% endif %}
+
+                            {% if request.session.access_level == 'PAYEE User' %}
+                                {% include "partials/menus/payee_user.html" %}
+                            {% endif %}
+
+                            {% if request.session.access_level == 'DA User' %}
+                                {% include "partials/menus/da_user.html" %}
+                            {% endif %}
+
+
+                            {% if request.session.access_level == 'Store User' %}
+                                {% include "partials/menus/store_user.html" %}
+                            {% endif %}
+                    
+                    
+
+                    {% else%}
+                        <strong class="py-4 mx-4">You Cant Use This System!!  </strong>
+                    {% endif %}
+        
+
+
+
+      </ul>
+     
+    <!--   <ul class="navbar-nav sidenav-toggler">
+        <li class="nav-item">
+          <a class="nav-link text-center" id="sidenavToggler">
+            <i class="fa fa-fw fa-angle-left"></i>
+          </a>
+        </li>
+      </ul> -->
+      <ul class="navbar-nav ml-auto">
+
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-fw fa-bell"></i>
+            <!-- <span class="d-lg-none">Messages
+              <span class="badge badge-pill badge-primary">{{ notifications|length}} new</span>
+            </span> -->
+            <span class="indicator text-dark d-none d-lg-block">
+               {{ notifications|length}}
+            </span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="messagesDropdown">
+            <h6 class="dropdown-header">Notifications:</h6>
+            <div class="dropdown-divider"></div>
+
+            {% if notifications %}
+
+                {% for notification in notifications %}
+              
+                   <a class="dropdown-item" href="#">
+                    <strong>Jane Smith</strong>
+                    <span class="small float-right text-muted">{{notification.registration_date}}</span>
+                    <div class="dropdown-message small">{{notification.notification_txt}}</div>
+                  </a>
+                  
+                  <div class="dropdown-divider"></div> 
+
+               {% endfor%}
+ 
+            {% else %}
+
+               <span class="dropdown-item   p-2">
+                  <h6 class="dropdown-message small">
+               You dont have any new notifications </h6> </span>
+            {% endif %}
+           
+           
+
+          </div>
+        </li>
+
+
+       
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" placeholder="Search for TIN" required>
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">My Dashboard</li>
+      </ol>
+      <!-- Icon Cards-->
+      <div class="row">
+        <div class="col-xl-3 col-sm-6 mb-3">
+          <div class="card text-white bg-primary o-hidden h-100">
+            <div class="card-body">
+              <div class="card-body-icon">
+                <i class="fa fa-fw fa-comments"></i>
+
+            
+              </div>
+              <div class="mr-5">{{all_individuals_count}} Individuals!</div>
+            </div>
+            <a class="card-footer text-white clearfix small z-1" href="/tin/individuals/">
+              <span class="float-left">View Details</span>
+              <span class="float-right">
+                <i class="fa fa-angle-right"></i>
+              </span>
+            </a>
+          </div>
+         </div>
+        <div class="col-xl-3 col-sm-6 mb-3">
+          <div class="card text-white bg-warning o-hidden h-100">
+            <div class="card-body">
+              <div class="card-body-icon">
+                <i class="fa fa-fw fa-list"></i>
+              </div>
+              <div class="mr-5">{{all_companies_count}} Companies!</div>
+            </div>
+            <a class="card-footer text-white clearfix small z-1" href="/tin/companies/">
+              <span class="float-left">View Details</span>
+              <span class="float-right">
+                <i class="fa fa-angle-right"></i>
+              </span>
+            </a>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-3">
+          <div class="card text-white bg-success o-hidden h-100">
+            <div class="card-body">
+              <div class="card-body-icon">
+                <i class="fa fa-fw fa-shopping-cart"></i>
+              </div>
+              <div class="mr-5">{{all_users_count}} Users!</div>
+            </div>
+            <a class="card-footer text-white clearfix small z-1" href="/set-up/users/">
+              <span class="float-left">View Details</span>
+              <span class="float-right">
+                <i class="fa fa-angle-right"></i>
+              </span>
+            </a>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-3">
+          <div class="card text-white bg-danger o-hidden h-100">
+            <div class="card-body">
+              <div class="card-body-icon">
+                <i class="fa fa-fw fa-support"></i>
+              </div>
+              <div class="mr-5">{{all_vehicles_count}} Vehicles!</div>
+            </div>
+            <a class="card-footer text-white clearfix small z-1" href="/mla/vehicles/">
+              <span class="float-left">View Details</span>
+              <span class="float-right">
+                <i class="fa fa-angle-right"></i>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+     
+
+
+
+
+
+
+
+
+
+
+ <div class="row">
+        <div class="col-lg-8">
+          <!-- Example Bar Chart Card-->
+          <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-bar-chart"></i> #### </div>
+            <div class="card-body">
+              <canvas id="revenueBar" width="100" height="50"></canvas>
+            </div>
+            <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
+          </div>
+
+
+          <!-- Card Columns Example Social Feed-->
+          
+ 
+
+
+          <div class="card-columns">
+            <!-- Example Social Card-->
+            
+            
+            
+            <!-- Example Social Card-->
+            <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-bar-chart"></i>Tin Numbers</div>
+            <div class="card-body">
+               <canvas id="tinNumbers"></canvas>
+            </div>
+            <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
+          </div>
+
+            <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-bar-chart"></i>Number Plates</div>
+            <div class="card-body">
+              <canvas id="numberPlates"></canvas>
+            </div>
+            <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
+          </div>
+
+
+
+          </div>
+
+           <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-bar-chart"></i> Past 30 days</div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-8 my-auto">
+                    <canvas id="myChartxz" width="100" height="50"></canvas>
+                  </div>
+                  <div class="col-sm-4 text-center my-auto">
+                    <div class="h4 mb-0 text-primary">$34,693</div>
+                    <div class="small text-muted">YTD Revenue</div>
+                    <hr>
+                     
+                  </div>
+                </div>
+              </div>
+            <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
+          </div>
+          <!-- /Card Columns-->
+        </div>
+        <div class="col-lg-4">
+          <!-- Example Pie Chart Card-->
+          <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-pie-chart"></i>Online Users</div>
+            <div class="card-body">
+              <canvas id="onlineUsersDoughnut" width="100%" height="100"></canvas>
+            </div>
+            <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
+          </div>
+  
+          <!-- Example Notifications Card-->
+         
+
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+
+
+
+
+
+
+    
+        
+      </div>
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © CoreIGR 2018</small>
+        </div>
+      </div>
+    </footer>
+
+
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+
+
+    <div class="modal fade" id="passwordCreatedModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Password Created</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Password created Successfully </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap core JavaScript-->
+
+    <!-- change passord modal -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color: rgb(0,0,0,0.9);"  data-backdrop="static">
+
+       <div class=" mt-5 text-center">
+      <img class="img-fluid" src="{% static 'images/assets/logo_md.png' %}" alt="logo"> 
+    </div>
+
+
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Please add your Password before you continue</h5>
+            
+          </div>
+          <form method="POST" action="/set-up/create-password/">
+             {% csrf_token %}
+          <div class="modal-body">
+            
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">New Password</label>
+                <input type="password" name="pass" class="form-control" id="recipient-name" minlength="8" autofocus required maxlength="20">
+              </div>
+              <div class="form-group">
+                <label for="message-text" class="col-form-label">Retype Password</label>
+                 <input type="password" name="password" class="form-control" id="recipient-name" minlength="8" required maxlength="20">
+              </div>
+           
+          </div>
+          <div class="modal-footer">
+            <a href="/set-up/login/" class="btn btn-secondary">Cancel</a>
+            <input type="submit" class="btn btn-primary" value="Change Password">
+          </div>
+           </form>
+        </div>
+      </div>
+    </div>
+    <!-- change  password modal -->
+  {% include 'partials/js_links.html' %}
+</body>
+
+
+<script>
+var revenueBar = document.getElementById("revenueBar").getContext('2d');
+var onlineUsersDoughnut = document.getElementById("onlineUsersDoughnut").getContext('2d');
+var numberPlates = document.getElementById("numberPlates").getContext('2d');
+var myChartxz = document.getElementById("myChartxz").getContext('2d');
+
+var tinNumbers = document.getElementById("tinNumbers").getContext('2d');
+
+new Chart(revenueBar, {
+    type: 'bar',
+    data: {
+        labels: ["data1", "data2", "data3"],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3],
+
+             backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+              
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                
+            ],
+             
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+
+var myChartcv = new Chart(myChartxz, {
+    type: 'line',
+    data: {
+        labels: ["Red", "Blue",  "Orange"],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3],
+
+            
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+
+new Chart(onlineUsersDoughnut, {
+    type: 'doughnut',
+    data: {
+        labels: ["Online Users", "Offline Users",],
+        datasets: [{
+            label: '# of Votes',
+            data: [{{onLineUsers}}, {{offLineUsers}} ],
+
+             backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+              
+                
+            ],
+            borderColor: [
+                
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                
+            ],
+             
+            borderWidth: 1
+        }]
+    },
+    
+});
+
+
+
+new Chart(numberPlates, {
+    type: 'doughnut',
+    data: {
+      
+
+        labels: ["Issued", "Taken",],
+        datasets: [{
+            label: 'Number Plates',
+            data: [{{issued_number_plates_count}}, {{taken_number_plates_count}}],
+
+             backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+              
+                 
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                
+                
+            ],
+             
+             
+            borderWidth: 1
+        }]
+    },
+     
+});
+
+
+
+new Chart(tinNumbers, {
+    type: 'bar',
+    data: {
+        labels: ["Companies", "Individuals",],
+        datasets: [{
+            label: 'Tin Numbers',
+            data: [{{companies_tins_count}}, {{individuals_tins_count}}],
+             
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+
+ 
+
+//  $(document).on("click", ".notification", function() {
+//     var element = $(this)
+    
+//     $.ajax({
+//     url: '/set-up/notification-viewed/'+ $(this).val(),
+    
+//     success: function(data) {
+      
+       
+//         element.parent().remove();
+
+//          if( $('.notification').length  == 0)         
+//           {
+            
+//                // it exists
+//                $('.notification-time').remove()
+//                $('.notifications').append('<h5 class="card-footer small text-muted">all notification have been cleared</h5> ')
+//           }
+
+//     },
+//     failure: function(data) { 
+//         alert('Try agian later');
+//     }
+
+//     })
+    
+// });
+
+
+
+</script>
+
+ {% if messages %}
+
+          {% for message  in messages %}
+
+            {% if  "change_password" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#changePasswordModal').modal('show');
+                
+            </script>
+            {% elif  "password_created" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#passwordCreatedModal').modal('show');
+                
+            </script>
+         
+ 
+            {% endif %}
+
+              
+          {% endfor %}
+
+        {% endif %}
+
+</html>

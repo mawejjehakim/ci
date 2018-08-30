@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Other Charges</title>
+ {% include 'partials/css_head_links.html' %}
+
+    <style>
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" placeholder="Search for TIN" required>
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">other charges</li>
+      </ol>
+      <!-- Example DataTables Card-->
+      <div class="card mb-3">
+        <div class="card-header">
+          <i class="fa fa-table"></i> Other Charges
+        </div>
+        <div class="card-body">
+
+          <div class="table-responsive">
+             <a href="/set-up/add-other-charge/"  class="btn btn-primary"  style="float: right;margin-left: 20%;margin-right: 20px;">Add Other charge</a>
+
+
+             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+             {% if other_charges %}
+
+                <tr>
+                <tr>
+                  
+                  <th>Particulars</th>
+                  <th>Amount</th>
+                  <th>Options</th> 
+
+                </tr>
+                 
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                <tr>
+                  
+                  <th>Particulars</th>
+                  <th>Amount</th>
+                  <th>Options</th>
+                 
+
+
+
+
+                </tr>
+                  
+                </tr>
+              </tfoot>
+             
+
+
+
+              <tbody>
+                {% for other_charge in other_charges %}
+                <tr> 
+             
+                  <td>{{ other_charge.particulars }}</td>
+                  <td>{{ other_charge.amount }}</td>
+                 
+                  <td>
+                     <button type="button" class="btn btn-outline-primary btn-sm edit-charge" data-charge_id={{other_charge.id}}  data-particulars="{{other_charge.particulars}}" data-amount="{{other_charge.amount}}" data-toggle="modal"> Edit</button>
+
+
+                    {% if other_charge.is_active %}
+                      <button type="button" class="btn btn-outline-danger btn-sm toggle-charge-state" data-charge_id="{{other_charge.id}}" > Disable</button> &nbsp;&nbsp;
+                      
+                    {% else %}
+
+                    <button type="button" class="btn btn-outline-success btn-sm toggle-charge-state" data-charge_id="{{other_charge.id}}" > Enable</button>
+                     
+                    {% endif %}
+                  </td>
+                  
+                </tr>
+                {% endfor %}
+              </tbody>
+              {% else %}
+                 <div class="alert alert-warning float-left"  role="alert">
+                     No Other Charges Yet
+                </div>
+              {% endif %}
+              
+            </table>
+
+ 
+          </div>
+        </div>
+        <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
+      </div>
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © Your CoreIGR 2018</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+
+
+
+ <div class="modal fade" id="editOtherChargeModal" tabindex="-1" role="dialog"   aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addStateCodeModalTitle">Edit Other Charge</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <!-- -------------------------------------------------------------------- -->
+            
+              <form action="/set-up/edit-other-charge/" method="POST"> 
+                {% csrf_token %}
+
+                 <input type="hidden" class="form-control" name="charge_id"  id="charge_id">
+                 
+
+
+                     <div class="form-group ">
+                      <label for="particulars" class="col-form-label">Particulars</label>
+                      
+                       
+                       <select required class="form-control form-control-sm particulars" name="particulars">
+                          <option value="">Choose Particulars</option>
+
+                         <option>Learners Permit</option>
+                          <option>L-Symbol</option>
+                          <option>SMS Alert</option>
+                          <option>Stamp Duty</option>
+                          <option>New Plate Number</option>
+                          <option>New Plate Number (TM)</option>
+
+                        
+                      </select>
+                       
+                      
+                    </div>
+
+                     <div class="form-group ">
+                      <label for="amount" class="col-form-label">Amount</label>
+                      <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">N</span>
+                          </div>
+                          <input type="text" required class="form-control amount" name="amount" aria-label="Amount (to the nearest dollar)">
+                          <div class="input-group-append">
+                            <span class="input-group-text">.00</span>
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+                      <label for="amount" class="col-form-label">Password</label>
+                       
+                          
+                        <input type="password" required class="form-control" name="password">
+                           
+                    </div>
+
+
+                     <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <input type="submit"  class="btn btn-primary" value="Edit Charge">
+                    </div>
+                
+                
+              </form>
+
+             
+            </div>
+           
+          </div>
+        </div>
+      </div>
+
+
+  
+   <div class="modal fade" id="recordUpdatedModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Record Updated</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p>  Record Updated Successful</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="wrongPasswordModal" data-backdrop="static">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Wrong Password</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p> Please type correct password</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+               <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="modal fade" id="wrongDataModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Wrong Input Data</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p> Please type correct Data</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal fade" id="recordAlreadyModal">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+            
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h5 class="modal-title">Record Exist Created!</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              
+              <!-- Modal body -->
+              <div class="modal-body">
+                <p> Record you are trying to update already exist </p>
+              </div>
+              
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+      <div class="modal fade" id="toggleStateModal" tabindex="-1" role="dialog" aria-labelledby="addStateCodeModalTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addStateCodeModalTitle">Password Confirmation</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <!-- -------------------------------------------------------------------- -->
+            
+              <form action="/set-up/toggle-other-charge-state/" method="POST"> 
+                {% csrf_token %}
+
+
+                <input type="hidden" class="form-control" name="charge_id"  id="charge_id_state_change">
+
+                <div class="form-group">                     
+
+                    
+                    <label for="password" class="col-form-label">Password</label>
+                    <input type="Password" class="form-control" name="password" required >
+                  
+                                
+                </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <input type="submit"  class="btn btn-primary" value="Change Charge State">
+                  </div>
+              </form>
+
+             
+            </div>
+           
+          </div>
+        </div>
+      </div>
+
+      
+    <!-- Logout Modal-->
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  {% include 'partials/js_links.html' %}
+   <script>
+
+
+             
+          $(document).ready(function() {
+              $("input:text")
+                  .focus(function () { $(this).select(); } )
+                  .mouseup(function (e) {e.preventDefault(); });
+          });
+
+
+          $(".edit-charge").on("click", function () {
+            /* body... */
+
+
+            $('#editOtherChargeModal').modal('show');     
+            
+            $('#charge_id').val($(this).attr('data-charge_id'))
+            
+            $('.particulars').val($(this).attr('data-particulars'))
+            $('.amount').val($(this).attr('data-amount'))
+            
+          })
+
+          $(".toggle-charge-state").on("click", function () {
+            /* body... */
+
+
+            $('#toggleStateModal').modal('show');             
+            $('#charge_id_state_change').val($(this).attr('data-charge_id'))
+          
+            
+          })
+            
+   
+    </script>
+
+
+      {% if messages %}
+
+            {% for message  in messages %}
+
+              {% if  "record_updated" in message.extra_tags %}
+               
+                <script>                   
+                  
+                       $('#recordUpdatedModal').modal('show');
+                  
+              </script>
+ 
+              
+
+              
+
+            {% elif  "wrong_pass" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongPasswordModal').modal('show');
+                
+            </script>
+
+            {% elif  "wrong_data" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongDataModal').modal('show');
+                
+            </script>
+
+            {% elif  "record_already_created" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#recordAlreadyModal').modal('show');
+                
+            </script>
+           
+
+           
+
+              
+              {% endif %}
+
+                
+            {% endfor %}
+
+          {% endif %}
+
+</body>
+
+</html>

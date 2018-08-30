@@ -1,0 +1,39 @@
+
+{% load static %}
+<li class="nav-item border-bottom text-center" data-toggle="tooltip" data-placement="right" title="Dashboard">
+  <a class="nav-link" href="/login/">
+  <img class="img-fluid" src="{% static 'images/assets/logo.png' %}" alt="Chania"> 
+  </a>
+</li>
+
+
+
+<li class="nav-item border-bottom" data-toggle="tooltip" data-placement="right" title="Dashboard">
+  <a class="nav-link" href="">
+    <i class="fa fa-fw fa-dashboard"></i>
+    <span class="nav-link-text">DASHBOARD</span>
+  </a>
+</li>
+
+<li class="nav-item border-bottom" data-toggle="tooltip" data-placement="right" title="Components">
+  <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#bills" >
+    <i class="fa fa-fw fa-money"></i>
+    <span class="nav-link-text">BILLS</span>
+  </a>
+  <ul class="sidenav-second-level collapse" id="bills">
+     <li>
+       <a href='/mda/genearate-bill/' target='_blank'>Generate Bill</a>
+      </li>
+      <li>
+          <a href='/mda/mdas/'>MDA</a>
+      </li>
+           <li>
+          <a href='/mda/revenue-items'>Add Revenue Item</a>
+      </li>
+      <li>
+        <a href="/mda/select-payment/">Make Payment</a>
+      </li>
+
+
+  </ul>
+</li>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+  <title>CoreIGR | Add Charge</title>
+ {% include 'partials/css_head_links.html' %}
+
+    <style>
+     .bg-primary-color{
+      background-color:     #28b463    ;
+      
+     }
+     .bg-primary-light-color{
+        background-color:   #ecf0f1 
+     }
+    
+   </style>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-primary-light-color" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary-color fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">CoreIGR</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Home</span>
+          </a>
+        </li>
+      
+        
+      </ul>
+     
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2" action="/search/" method="POST">
+             {% csrf_token %}
+            <div class="input-group">
+              <input class="form-control" name="search_text" type="text" required placeholder="Search for TIN" required>
+              <span class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Add Charge</li>
+      </ol>
+      <!-- Example DataTables Card-->
+
+      <div class="card">
+      <h5 class="card-header">Add Charge</h5>
+      <div class="card-body">
+
+
+       <form action="/set-up/add-charge/" method="POST"> 
+                {% csrf_token %}
+                <div class="form-group">
+
+
+                   <div class="form-group row">
+                      <label for="options" class="col-sm-2 col-form-label">Charge Type</label>
+                      <div class="col-sm-10">
+
+                       
+                       <select required class="form-control form-control-sm" name="options">
+                        <option value="">Choose Charge type</option>
+
+                        <option>New</option>
+                        <option>Renew</option>
+
+                        
+                      </select>
+                       
+                      </div>
+                    </div>
+
+
+                   <div class="form-group row">
+                      <label for="vehicle_type" class="col-sm-2 col-form-label">Vehicle Type</label>
+                      <div class="col-sm-10">
+
+                       
+                       <select required class="form-control form-control-sm" name="vehicle_type">
+                          <option value="">Choose Vehicle type</option>
+
+                          <option>Private Vehicle Saloon</option>
+                          <option>Commercial Vehicle Saloon</option>
+                          <option>Private Pickup/Bus</option>
+                          <option>Commercial Pickup/Bus</option>
+                          <option>Dealers Vehicle</option>
+                          <option>Commercial Truck/Trailer/Lorry/Tipper</option>
+                          <option>Private Motorcycle</option>
+                          <option>Commercial Tricycle/Motorcycle</option>
+                          <option>Dealers Tricycle/Motorcycle</option>
+
+                        
+                      </select>
+                       
+                      </div>
+                    </div>
+
+
+                     <div class="form-group row">
+                      <label for="particulars" class="col-sm-2 col-form-label">Particulars</label>
+                      <div class="col-sm-10">
+
+                       
+                       <select required class="form-control form-control-sm" name="particulars">
+                          <option value="">Choose Particulars</option>
+
+                          <option>Registration Book</option>
+                          <option>Proof of ownership</option>
+                          <option>New Plate Number</option>
+                          <option>Inspection Fee</option>
+                          <option>Hackney permit</option>
+                          <option>Hackney permit [6 - 8 tyres]</option>
+                          <option>Hackney permit [10 tyres - above]</option>
+                          <option>Driver Badge</option>
+                          <option>Conductors Badge</option>
+                          <option>Certificate of road worthiness</option>
+                          <option>Price of vehicle above 1 million</option>
+                          <option>Price of vehicle below 1 million</option>
+                          <option>Vehicle License [1.6 - 2.0]</option>
+                          <option>Vehicle License [2.1 - 3.0]</option>
+                          <option>Vehicle License [3.1 - Above]</option>
+                          <option>Vehicle License [6 - 8 tyres]</option>
+                          <option>Vehicle License [10 tyres - above]</option>
+                          <option>Vehicle License Tricycle</option>
+                          <option>Vehicle License Motorcycle</option>
+                          <option>Registration Fee</option>
+                          <option>SMS Alert</option>
+                          <option>Stamp Duty</option>
+
+                        
+                      </select>
+                       
+                      </div>
+                    </div>
+
+                     <div class="form-group row">
+                      <label for="amount" class="col-sm-2 col-form-label">Amount</label>
+                      <div class="col-sm-10">
+                         <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">N</span>
+                          </div>
+                          <input type="text" required class="form-control" name="amount" aria-label="Amount (to the nearest dollar)">
+                          <div class="input-group-append">
+                            <span class="input-group-text">.00</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                     <div class="form-group row"> 
+                        <div class="col-sm-2 offset-md-2">
+                            <input type="submit"  class="btn btn-primary" value="Save Charge">
+                        </div>
+                    </div>
+
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+   <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © CoreIGR 2018</small>
+        </div>
+      </div>
+    </footer>
+
+    <div class="modal fade" id="recordCreatedModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Record created</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Charge Record  created Successful</p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="recordExistModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">Record Already Exist!</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p> Record of this kind already Exist</p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+<div class="modal fade" id="accessDeniedModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Access Denied</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p> You Dont have right to perform this action</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+   <div class="modal fade" id="wrongDataModal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h5 class="modal-title">Wrong Input Data</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p> Please type correct Data</p>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+
+    <!-- Logout Modal-->
+
+
+     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutLabel">Logout </h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Ready to Leave?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/set-up/logout/">Yes </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+{% include 'partials/js_links.html' %}
+
+     {% if messages %}
+
+          {% for message  in messages %}
+
+            {% if  "record_created" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#recordCreatedModal').modal('show');
+                
+            </script>
+
+             {% elif  "access_denied" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#accessDeniedModal').modal('show');
+                
+            </script>
+
+            {% elif  "record_exist" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#recordExistModal').modal('show');
+                
+            </script>
+
+            {% elif  "wrong_data" in message.extra_tags %}
+             
+              <script>                   
+                
+                     $('#wrongDataModal').modal('show');
+                
+            </script>
+        
+            
+            {% endif %}
+
+              
+          {% endfor %}
+
+        {% endif %}
+  
+</body>
+
+
+</html>

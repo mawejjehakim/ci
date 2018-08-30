@@ -1,0 +1,41 @@
+
+{% load static %}
+<li class="nav-item border-bottom text-center" data-toggle="tooltip" data-placement="right" title="Dashboard">
+  <a class="nav-link" href="/login/">
+  <img class="img-fluid" src="{% static 'images/assets/logo.png' %}" alt="Chania"> 
+  </a>
+</li>
+
+
+
+<li class="nav-item border-bottom" data-toggle="tooltip" data-placement="right" title="Dashboard">
+  <a class="nav-link" href="">
+    <i class="fa fa-fw fa-dashboard"></i>
+    <span class="nav-link-text">DASHBOARD</span>
+  </a>
+</li>
+ 
+ 
+<li class="nav-item border-bottom" data-toggle="tooltip" data-placement="right" title="Components">
+  <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#store" >
+    <i class="fa fa-fw fa-user"></i>
+    <span class="nav-link-text">STORE</span>
+  </a>
+  <ul class="sidenav-second-level collapse" id="store">
+    
+	 
+      <li>
+          <a href='/store/plate-numbers/'>Plate Numbers</a>
+      </li>
+      <li>
+          <a href='/store/get-office-plates/'>Issue Plate Numbers</a>
+      </li>
+      <!-- <li>
+          <a href='/store/inventory-car-plate/'>Plate Numbers Inventory</a>
+      </li> -->
+                       
+
+  </ul>
+</li>
+ 
+ 
